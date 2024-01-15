@@ -1,21 +1,62 @@
+Steps to configure Keycloak and RHDH (Red Hat Developer Hub) to use in a PoC
 
-## Keycloak (optional)
-- Install RHBK operator
+## Install Keycloak (Optional)
+- Install RHBK (Red Hat build of Keycloak) operator
 - Apply all yamls files 
-- Create Keycloak
-  - Config hostname
-  - user
-  - password
-  - http
-  - tls
-  - new realm (backstage)
-    - new client(backstage)
-      - Client authentication, Service accounts roles
-        - query-groups
-        - query-users
-        - view-users
-- Configurar keycloak, extraContainers
-  
+- Create Keycloak CR
+  - Configure: 
+    - hostname
+    - user
+    - password
+    - http
+    - tls
+
+## Configure Keycloak
+- new realm: backstage
+  - new clien: backstage (Client authentication, Service accounts roles)
+    - Valid redirect URIs, Valid post logout redirect URIs and Web origins = *
+    - Clients -> backstage -> Service Account roles -> Assign role -> Filter by clients
+    - Add 
+      - realm-management query-groups
+      - realm-management query-users
+      - realm-management view-users
+
+## Install RHDH using Helm Chart
+
+[Link](https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html/getting_started_with_red_hat_developer_hub/proc-install-rhdh-helm_rhdh-getting-started#doc-wrapper)
+
+## Configure ConfigMap
+- Create and Configure ConfigMap
+  - https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html/getting_started_with_red_hat_developer_hub/ref-rhdh-supported-configs_rhdh-getting-started#proc-add-custom-app-file-openshift_rhdh-getting-started
+
+    ```
+kind: ConfigMap
+apiVersion: v1
+metadata:
+    name: app-config-rhdh
+data:
+  app-config-rhdh.yaml: |
+    app:
+      title: RHDH PoC
+    auth:
+      environment: production
+      providers:
+      oauth2Proxy: {}
+    signInPage: oauth2Proxy
+    catalog:
+      providers:
+        keycloakOrg:
+          default:
+            baseUrl: https://keycloak-backstage.apps.cluster-kg2fs.dynamic.redhatworkshops.io/
+            loginRealm: backstage
+            realm: backstage
+            clientId: backstage
+            clientSecret: qsOwWkR1yekklL3lUXIpw9EO5LAQG49f
+    ```
+
+
+## Configure Helm
+
   ```
     keycloak:
         baseUrl: 'https://keycloak-backstage.apps.cluster-kg2fs.dynamic.redhatworkshops.io'
@@ -24,7 +65,7 @@
         cookieSecret: ''
         realm: backstage
     
-    service: (já existe)
+    service: (already exists in Healm)
         externalTrafficPolicy: Cluster
         ports:
         backend: 4180
@@ -35,7 +76,7 @@
   ```
 
   ```
-    extraContainers: (está em upstream.backstage)
+    extraContainers: (already exists in Healm upstream.backstage)
       - args:
           - '--provider=oidc'
           - '--email-domain=*'
@@ -75,43 +116,16 @@
             protocol: TCP
   ```
 
-
-- Criar usuário de teste no realm backstage, com e-mail verificado e password.
-## Passos
-
-- Install healm chart
-- Create ConfigMap
-  - https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html/getting_started_with_red_hat_developer_hub/ref-rhdh-supported-configs_rhdh-getting-started#proc-add-custom-app-file-openshift_rhdh-getting-started
-
-    Ex final:
-
-    ```
-        kind: ConfigMap
-        apiVersion: v1
-        metadata:
-        name: app-config-rhdh
-        data:
-        app-config-rhdh.yaml: |
-            app:
-            title: Vinicius
-            auth:
-                environment: production
-                    providers:
-                        oauth2Proxy: {}
-            signInPage: oauth2Proxy
-    ```
-
-## Fontes:
-
-https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html/getting_started_with_red_hat_developer_hub/proc-install-rhdh-helm_rhdh-getting-started#doc-wrapper
-
+## Keycloak User
+- Create new user in backstage realm in Keycloak with username, e-mail, Email verified (Yes) and password
+- 
 
 
 # Issues
 
 ## 1
 
-Depois de habilitar o keycloak:
+After configure Keycloak in Backstage:
 
 [2m2024-01-15T14:06:51.525Z[22m [34mbackstage[39m [32minfo[39m Adding plugin "catalog" to backend... 
 /opt/app-root/src/node_modules/@backstage/config/dist/index.cjs.js:305
@@ -134,8 +148,9 @@ Error: Missing required config value at 'catalog.providers.keycloakOrg.default.b
     at async main (/opt/app-root/src/packages/backend/dist/index.cjs.js:783:3)
 
 Fix:
-    no ConfigMap incluir
+    Configure keycloakOrg in the ConfigMap
 
+Example
     ```
     catalog:
       providers:
@@ -160,7 +175,7 @@ at ssl.onhandshakedone (node:_tls_wrap:803:12) status=undefined
 Fix:
      
      ```
-     extraEnvVars: (já existe esse, upstream.backstage.)
+     extraEnvVars: (already exists in, upstream.backstage.)
       - name: NODE_TLS_REJECT_UNAUTHORIZED
         value: '0'
      ```
