@@ -1,0 +1,22 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: app-config-rhdh
+data:
+  app-config-rhdh.yaml: |
+    app:
+      title: Vinicius Ferraz
+    signInPage: oauth2Proxy
+    auth:
+      environment: production
+      providers:
+        oauth2Proxy: {}
+    catalog:
+      providers:
+        keycloakOrg:
+          default:
+            baseUrl: https://keycloak-backstage.apps.cluster-kg2fs.dynamic.redhatworkshops.io/
+            loginRealm: backstage
+            realm: backstage
+            clientId: backstage
+            clientSecret: qsOwWkR1yekklL3lUXIpw9EO5LAQG49f

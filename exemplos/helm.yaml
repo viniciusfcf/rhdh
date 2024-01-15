@@ -1,0 +1,240 @@
+global:
+  auth:
+    backend:
+      enabled: true
+  clusterRouterBase: apps.cluster-kg2fs.dynamic.redhatworkshops.io
+  dynamic:
+    includes:
+      - dynamic-plugins.default.yaml
+    plugins:
+      - disabled: false
+        package: >-
+          ./dynamic-plugins/dist/janus-idp-backstage-plugin-keycloak-backend-dynamic
+route:
+  enabled: true
+  host: '{{ .Values.global.host }}'
+  path: /
+  tls:
+    enabled: true
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  wildcardPolicy: None
+upstream:
+  backstage:
+    appConfig:
+      app:
+        baseUrl: 'https://{{- include "janus-idp.hostname" . }}'
+      backend:
+        auth:
+          keys:
+            - secret: '${BACKEND_SECRET}'
+        baseUrl: 'https://{{- include "janus-idp.hostname" . }}'
+        cors:
+          origin: 'https://{{- include "janus-idp.hostname" . }}'
+        database:
+          connection:
+            password: '${POSTGRESQL_ADMIN_PASSWORD}'
+            user: postgres
+    args:
+      - '--config'
+      - dynamic-plugins-root/app-config.dynamic-plugins.yaml
+    containerPorts:
+      backend: 7007
+    extraAppConfig:
+      - configMapRef: app-config-rhdh
+        filename: app-config-rhdh.yaml
+    extraContainers:
+      - args:
+          - '--provider=oidc'
+          - '--email-domain=*'
+          - '--upstream=http://localhost:7007'
+          - '--http-address=0.0.0.0:4180'
+          - '--skip-provider-button'
+        env:
+          - name: OAUTH2_PROXY_CLIENT_ID
+            value: >-
+              {{ required "Keycloak Client Secret is Required"
+              .Values.keycloak.clientId }}
+          - name: OAUTH2_PROXY_CLIENT_SECRET
+            value: >-
+              {{ required "Keycloak Client Secret is Required"
+              .Values.keycloak.clientSecret }}
+          - name: OAUTH2_PROXY_COOKIE_SECRET
+            value: >-
+              {{ default (randAlpha 32 | lower | b64enc)
+              .Values.keycloak.cookieSecret }}
+          - name: OAUTH2_PROXY_OIDC_ISSUER_URL
+            value: >-
+              {{ required "Keycloak Issuer URL is Required"
+              .Values.keycloak.baseUrl }}/realms/{{ required "Keycloak Realm is
+              Required" .Values.keycloak.realm }}
+          - name: OAUTH2_PROXY_SSL_INSECURE_SKIP_VERIFY
+            value: 'true'
+          - name: NODE_TLS_REJECT_UNAUTHORIZED
+            value: '0'
+          - name: LOG_LEVEL
+            value: debug
+        image: 'quay.io/oauth2-proxy/oauth2-proxy:latest'
+        imagePullPolicy: IfNotPresent
+        name: oauth2-proxy
+        ports:
+          - containerPort: 4180
+            name: oauth2-proxy
+            protocol: TCP
+    extraEnvVars:
+      - name: NODE_TLS_REJECT_UNAUTHORIZED
+        value: '0'
+      - name: BACKEND_SECRET
+        valueFrom:
+          secretKeyRef:
+            key: backend-secret
+            name: '{{ include "janus-idp.backend-secret-name" $ }}'
+      - name: POSTGRESQL_ADMIN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: postgres-password
+            name: '{{- include "janus-idp.postgresql.secretName" . }}'
+    extraVolumeMounts:
+      - mountPath: /opt/app-root/src/dynamic-plugins-root
+        name: dynamic-plugins-root
+    extraVolumes:
+      - ephemeral:
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
+        name: dynamic-plugins-root
+      - configMap:
+          defaultMode: 420
+          name: dynamic-plugins
+          optional: true
+        name: dynamic-plugins
+      - name: dynamic-plugins-npmrc
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: dynamic-plugins-npmrc
+    image:
+      debug: false
+      pullPolicy: Always
+      pullSecrets:
+        - rhdh-pull-secret
+      registry: registry.redhat.io
+      repository: rhdh/rhdh-hub-rhel9
+      tag: 1.0-200
+    initContainers:
+      - command:
+          - ./install-dynamic-plugins.sh
+          - /dynamic-plugins-root
+        env:
+          - name: NPM_CONFIG_USERCONFIG
+            value: /opt/app-root/src/.npmrc.dynamic-plugins
+        image: '{{ include "backstage.image" . }}'
+        imagePullPolicy: Always
+        name: install-dynamic-plugins
+        volumeMounts:
+          - mountPath: /dynamic-plugins-root
+            name: dynamic-plugins-root
+          - mountPath: /opt/app-root/src/dynamic-plugins.yaml
+            name: dynamic-plugins
+            readOnly: true
+            subPath: dynamic-plugins.yaml
+          - mountPath: /opt/app-root/src/.npmrc.dynamic-plugins
+            name: dynamic-plugins-npmrc
+            readOnly: true
+            subPath: .npmrc
+        workingDir: /opt/app-root/src
+    installDir: /opt/app-root/src
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /healthcheck
+        port: 7007
+        scheme: HTTP
+      initialDelaySeconds: 60
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 2
+    podAnnotations:
+      checksum/dynamic-plugins: >-
+        {{- include "common.tplvalues.render" ( dict "value"
+        .Values.global.dynamic "context" $) | sha256sum }}
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /healthcheck
+        port: 7007
+        scheme: HTTP
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      successThreshold: 2
+      timeoutSeconds: 2
+    replicas: 1
+    revisionHistoryLimit: 10
+  clusterDomain: cluster.local
+  diagnosticMode:
+    args:
+      - infinity
+    command:
+      - sleep
+    enabled: false
+  ingress:
+    enabled: false
+    host: '{{ .Values.global.host }}'
+    tls:
+      enabled: false
+  keycloak:
+    baseUrl: 'https://keycloak-backstage.apps.cluster-kg2fs.dynamic.redhatworkshops.io'
+    clientId: backstage
+    clientSecret: qsOwWkR1yekklL3lUXIpw9EO5LAQG49f
+    cookieSecret: ''
+    realm: backstage
+  metrics:
+    serviceMonitor:
+      enabled: false
+      path: /metrics
+  nameOverride: developer-hub
+  networkPolicy:
+    egressRules:
+      denyConnectionsToExternal: false
+    enabled: false
+  postgresql:
+    auth:
+      secretKeys:
+        adminPasswordKey: postgres-password
+        userPasswordKey: password
+    enabled: true
+    image:
+      registry: registry.redhat.io
+      repository: rhel9/postgresql-15
+      tag: latest
+    postgresqlDataDir: /var/lib/pgsql/data/userdata
+    primary:
+      containerSecurityContext:
+        enabled: false
+      extraEnvVars:
+        - name: POSTGRESQL_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgres-password
+              name: '{{- include "postgresql.v1.secretName" . }}'
+      persistence:
+        enabled: true
+        mountPath: /var/lib/pgsql/data
+        size: 1Gi
+      podSecurityContext:
+        enabled: false
+  service:
+    externalTrafficPolicy: Cluster
+    ports:
+      backend: 4180
+      name: oauth2-proxy
+      targetPort: oauth2-proxy
+    sessionAffinity: None
+    type: ClusterIP
+  serviceAccount:
+    automountServiceAccountToken: true
+    create: false
