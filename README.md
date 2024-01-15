@@ -47,11 +47,11 @@ data:
       providers:
         keycloakOrg:
           default:
-            baseUrl: https://keycloak-backstage.apps.cluster-kg2fs.dynamic.redhatworkshops.io/
-            loginRealm: backstage
-            realm: backstage
-            clientId: backstage
-            clientSecret: qsOwWkR1yekklL3lUXIpw9EO5LAQG49f
+            baseUrl: https://${KEYCLOAK_HOST}/ (old versions should include /auth after baseUrl)
+            loginRealm: ${KEYCLOAK_REALM}
+            realm: ${KEYCLOAK_REALM}
+            clientId: ${KEYCLOAK_CLIENTID}
+            clientSecret: ${KEYCLOAK_CLIENTSECRET}
     ```
 
 
@@ -116,6 +116,27 @@ data:
             protocol: TCP
   ```
 
+  ```
+extraEnvVars: (already exists in, upstream.backstage.)
+  - name: NODE_TLS_REJECT_UNAUTHORIZED
+    value: '0'
+  - name: KEYCLOAK_HOST
+    value: '{{ required "Keycloak Host is Required" .Values.keycloak.baseUrl }}'
+  - name: KEYCLOAK_REALM
+    value: '{{ required "Keycloak Realm is Required" .Values.keycloak.realm }}'
+  - name: KEYCLOAK_CLIENTID
+    value: >-
+      {{ required "Keycloak Client ID is Required" .Values.keycloak.clientId
+      }}
+  - name: KEYCLOAK_CLIENTSECRET
+    value: >-
+      {{ required "Keycloak Client Secret is Required"
+      .Values.keycloak.clientSecret }}
+  - name: NODE_TLS_REJECT_UNAUTHORIZED
+    value: '0'
+  
+  ```
+
 ## Keycloak User
 - Create new user in backstage realm in Keycloak with username, e-mail, Email verified (Yes) and password
 - 
@@ -175,7 +196,10 @@ at ssl.onhandshakedone (node:_tls_wrap:803:12) status=undefined
 Fix:
      
      ```
-     extraEnvVars: (already exists in, upstream.backstage.)
-      - name: NODE_TLS_REJECT_UNAUTHORIZED
-        value: '0'
+extraEnvVars: (already exists in, upstream.backstage.)
+  - name: NODE_TLS_REJECT_UNAUTHORIZED
+    value: '0'
      ```
+
+
+
