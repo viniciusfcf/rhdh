@@ -1,0 +1,8 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: rhdh-operator-group
+  namespace: '{{ cluster_project }}'
+spec:
+  targetNamespaces:
+  - '{{ cluster_project }}'

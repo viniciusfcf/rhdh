@@ -29,4 +29,6 @@
       include_role:
         name: sso
 
-    
+    - name: Install RHDH
+      include_role:
+        name: rhdh
