@@ -24,6 +24,15 @@
         definition:
           metadata:
             name: "{{ cluster_project }}"
+
+    - name: Create rhdh-operator Namespace
+      k8s:
+        state: present
+        kind: Project
+        api_version: project.openshift.io/v1
+        definition:
+          metadata:
+            name: rhdh-operator
     
     - name: Install RHBK
       include_role:

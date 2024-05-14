@@ -20,3 +20,8 @@
   until: crd_rhdh.resources | list | length == 1
   retries: 10
   delay: 30
+
+- name: Create the RHDO Instance CR
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'rhdh-instance.yaml.j2') }}"
