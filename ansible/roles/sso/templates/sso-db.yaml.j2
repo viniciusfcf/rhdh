@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: kc-postgresql-db
+  name: kc-postgres-db
 spec:
   selector:
     matchLabels:
-      app: kc-postgresql-db
+      app: kc-postgres-db
   replicas: 1
   template:
     metadata:
       labels:
-        app: kc-postgresql-db
+        app: kc-postgres-db
     spec:
       containers:
-        - name: kc-postgresql-db
+        - name: kc-postgres-db
           image: postgres:15.7
           volumeMounts:
             - mountPath: /data
@@ -44,7 +44,7 @@ metadata:
   name: kc-postgres-db
 spec:
   selector:
-    app: kc-postgresql-db
+    app: kc-postgres-db
   type: LoadBalancer
   ports:
   - port: 5432
