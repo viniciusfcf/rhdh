@@ -1,0 +1,22 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+  labels:
+    app: sso
+  namespace: '{{ cluster_project }}'
+spec:
+  http:
+    tlsSecret: keycloak-tls-secret
+  hostname:
+    hostname: keycloak-rhbk.apps.cluster-m998k.sandbox1967.opentlc.com
+  db:
+    usernameSecret:
+      key: username
+      name: keycloak-db-secret
+    passwordSecret:
+      key: password
+      name: keycloak-db-secret
+    vendor: postgres
+    host: kc-postgresql-db
+  instances: 1

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kc-postgresql-db
+spec:
+  selector:
+    matchLabels:
+      app: kc-postgresql-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kc-postgresql-db
+    spec:
+      containers:
+        - name: kc-postgresql-db
+          image: postgres:15.7
+          volumeMounts:
+            - mountPath: /data
+              name: cache-volume
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: password
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: username
+            
+            - name: PGDATA
+              value: /data/pgdata
+            - name: POSTGRES_DB
+              value: keycloak
+      volumes:
+        - name: cache-volume
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kc-postgres-db
+spec:
+  selector:
+    app: kc-postgresql-db
+  type: LoadBalancer
+  ports:
+  - port: 5432
+    targetPort: 5432

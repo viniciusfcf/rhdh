@@ -1,0 +1,32 @@
+- hosts: localhost
+  name: Install RHDH
+  vars:
+    cluster_project: dhdb
+    insecure_skip_tls_verify: true
+    storage_class: ocs-external-storagecluster-ceph-rbd
+  tasks:
+    - name: Define domain
+      set_fact:
+        domain : "{{ server | regex_replace('https://api.') | regex_replace(':6443')   }}"
+
+    # - name: login as super user with token on OpenShift 4
+    #   command: "oc login --token={{ token }}  --server={{ server }} --insecure-skip-tls-verify={{ insecure_skip_tls_verify }}"
+    #   when:
+    #    - token is defined
+    #    - server is defined
+    #   ignore_errors: false
+    
+    - name: Create {{ cluster_project }} Namespace
+      k8s:
+        state: present
+        kind: Project
+        api_version: project.openshift.io/v1
+        definition:
+          metadata:
+            name: "{{ cluster_project }}"
+    
+    - name: Install RHBK
+      include_role:
+        name: sso
+
+    
