@@ -5,3 +5,6 @@ Ex de execução:
 # Pontos que devem ser atualizados:
 - certificado do keycloak
 - usuário e senha dos postgres
+- Valid redirect URIs, Valid post logout redirect URIs e Web origins do realm "rhdh". Atualmente estão com '*'
+# FAQ
+- Senha de admin do keycloak: keycloak-initial-admin

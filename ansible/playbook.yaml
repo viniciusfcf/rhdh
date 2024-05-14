@@ -1,7 +1,7 @@
 - hosts: localhost
   name: Install RHDH
   vars:
-    cluster_project: dhdb
+    cluster_project: rhdh
     insecure_skip_tls_verify: true
     storage_class: ocs-external-storagecluster-ceph-rbd
   tasks:

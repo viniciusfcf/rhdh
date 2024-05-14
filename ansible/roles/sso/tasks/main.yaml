@@ -26,10 +26,15 @@
     state: present
     resource_definition:  "{{ lookup('template', 'sso-tls-secret.yaml.j2') }}"
 
-- name: Create the SSO db secret
+- name: Create the SSO DB secret
   k8s:
     state: present
     resource_definition:  "{{ lookup('template', 'sso-db-secret.yaml.j2') }}"
+
+- name: Create the SSO DB
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'sso-db.yaml.j2') }}"
 
 
 - name: Create the SSO Instance CR
@@ -37,26 +42,32 @@
     state: present
     resource_definition:  "{{ lookup('template', 'sso-instance.yaml.j2') }}"
 
-- name: Wait for SSO to be running
-  uri:
-    url: "https://keycloak-{{ cluster_project }}.apps.{{ domain }}"
-    method: GET
-  register: _result
-  until: _result.status == 200
-  retries: 10
-  delay: 30
+# - name: Wait for SSO to be running
+#   uri:
+#     url: "https://keycloak-{{ cluster_project }}.apps.{{ domain }}"
+#     method: GET
+#   register: _result
+#   until: _result.status == 200
+#   retries: 10
+#   delay: 30
+
+- name: Create Realm
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'sso-realm.yaml.j2') }}"
+
 
 - name: Retrieve SSO admin credentials
   k8s_info:
-    kind: secret
-    name: credential-sso
+    kind: Secret
+    name: keycloak-initial-admin
     namespace: '{{ cluster_project }}'
   register: _sso_credentials
 
 
 - set_fact:
-    _sso_admin_user: '{{ _sso_credentials.resources[0].data.ADMIN_USERNAME | b64decode }}'
-    _sso_admin_password: '{{ _sso_credentials.resources[0].data.ADMIN_PASSWORD | b64decode }}'
+    _sso_admin_user: '{{ _sso_credentials.resources[0].data.username | b64decode }}'
+    _sso_admin_password: '{{ _sso_credentials.resources[0].data.password | b64decode }}'
 
 # - name: Get SSO Token
 #   uri: 
