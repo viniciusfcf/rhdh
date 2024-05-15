@@ -6,5 +6,12 @@ Ex de execução:
 - certificado do keycloak
 - usuário e senha dos postgres
 - Valid redirect URIs, Valid post logout redirect URIs e Web origins do realm "rhdh". Atualmente estão com '*'
+- os valores do Keycloak no helm estão duplicados/triplicados
+  
+# TODO
+- RBAC
+- git/azure
+- 
+
 # FAQ
 - Senha de admin do keycloak: keycloak-initial-admin

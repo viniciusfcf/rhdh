@@ -19,6 +19,8 @@ global:
     plugins:
       - package: ./dynamic-plugins/dist/backstage-plugin-tech-radar
         disabled: false
+      - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-keycloak-backend-dynamic
+        disabled: false
 route:
   annotations: {}
   enabled: true
@@ -85,6 +87,17 @@ upstream:
         value: ibpt0XiadE5XFNVQ4xnvhssk50aEWWVs
       - name: AUTH_OIDC_METADATA_URL
         value: https://keycloak-rhbk.apps.cluster-m998k.sandbox1967.opentlc.com/realms/rhdh/.well-known/openid-configuration
+      - name: KEYCLOAK_BASE_URL
+        value: https://keycloak-rhbk.apps.cluster-m998k.sandbox1967.opentlc.com/
+      - name: KEYCLOAK_LOGIN_REALM
+        value: rhdh
+      - name: KEYCLOAK_REALM
+        value: rhdh
+      - name: KEYCLOAK_CLIENT_ID
+        value: rhdh
+      - name: KEYCLOAK_CLIENT_SECRET
+        value: ibpt0XiadE5XFNVQ4xnvhssk50aEWWVs
+      
     extraAppConfig:
       - configMapRef: app-config-rhdh
         filename: app-config-rhdh.yaml
