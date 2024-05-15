@@ -34,24 +34,17 @@ data:
         - host: '*.opentlc.com'
     integrations:
     auth:
-      environment: development # production to disable Guest Login
+      environment: production # production to disable Guest Login
       # The session secret is for a session store and is a requirement for some of the auth providers (eg. OIDC).
       session:
         secret: ${SESSION_SECRET} # It can be a string like mySuperSecret
       providers:
-        # #https://github.com/janus-idp/backstage-showcase/blob/main/showcase-docs/auth.md#oidc
-        # https://backstage.io/docs/auth/oidc/#the-configuration
-        # oidc:
-        #   development:
-        #     metadataUrl: ${AUTH_OIDC_METADATA_URL} #https://kecloakurl/auth/realms/rhdh/.well-known/openid-configuration
-        #     clientId: ${AUTH_OIDC_CLIENT_ID}
-        #     clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
-        #     prompt: ${AUTH_OIDC_PROMPT} # recommended to use auto
-        #     ## uncomment for additional configuration options
-        #     # callbackUrl: ${AUTH_OIDC_CALLBACK_URL}
-        #     # tokenEndpointAuthMethod: ${AUTH_OIDC_TOKEN_ENDPOINT_METHOD}
-        #     # tokenSignedResponseAlg: ${AUTH_OIDC_SIGNED_RESPONSE_ALG}
-        #     # scope: ${AUTH_OIDC_SCOPE}
+        oidc:
+          production:
+            metadataUrl: ${AUTH_OIDC_METADATA_URL} #https://kecloakurl/auth/realms/rhdh/.well-known/openid-configuration
+            clientId: ${AUTH_OIDC_CLIENT_ID}
+            clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
+            prompt: auto
     signInPage: oidc # gitlab
 
     proxy:
