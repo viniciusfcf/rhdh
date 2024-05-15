@@ -4,6 +4,9 @@
     cluster_project: rhdh
     insecure_skip_tls_verify: true
     storage_class: ocs-external-storagecluster-ceph-rbd
+    rhdh_helm_values_file: "rhdh-helm.yaml.j2"
+    rhdh_helm_chart_version: "1.1.0"
+    rhdh_image_version: "1.1-97"
   tasks:
     - name: Define domain
       set_fact:

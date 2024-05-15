@@ -2,7 +2,7 @@ apiVersion: rhdh.redhat.com/v1alpha1
 kind: Backstage
 metadata:
   name: developer-hub
-  namespace: rhdh
+  namespace: '{{ cluster_project }}'
 spec:
   application:
     appConfig:

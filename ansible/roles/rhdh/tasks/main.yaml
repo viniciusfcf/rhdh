@@ -1,27 +1,50 @@
-- name: Create RHDH Operator Group
-  k8s:
+# From: https://github.com/redhat-na-ssa/redhat-developer-hub-gitops-bootstrap/blob/main/ansible-automation/playbooks/rhdh-install/setup_rhdh.yml
+- name: Create the RHDH app ConfigMap
+  kubernetes.core.k8s:
     state: present
-    namespace: '{{ cluster_project }}'
-    resource_definition: "{{ lookup('template', 'rhdh-operatorgroup.yaml.j2') }}"
+    definition: "{{ lookup('template', 'rhdh-app-config.yaml.j2') | from_yaml }}"
 
-- name: Create RHDH Subscription
-  k8s:
-    state: present
-    namespace: '{{ cluster_project }}'
-    resource_definition: "{{ lookup('template', 'rhdh-subscription.yaml.j2') }}"
+- name: Add Openshift chart repo
+  kubernetes.core.helm_repository:
+    name: openshift-helm-charts
+    repo_url: "https://charts.openshift.io"
 
-- name: Wait for RHDH operator to install
-  k8s_info:
-    api_version: apiextensions.k8s.io/v1
-    kind: CustomResourceDefinition
-    name: backstages.rhdh.redhat.com
-    namespace: '{{ cluster_project }}'
-  register: crd_rhdh
-  until: crd_rhdh.resources | list | length == 1
-  retries: 10
-  delay: 30
+- name: Render RHDH Helmchart values template 
+  ansible.builtin.template: src="{{ rhdh_helm_values_file }}" dest="/tmp/{{ rhdh_helm_values_file }}"
 
-- name: Create the RHDO Instance CR
-  k8s:
-    state: present
-    resource_definition:  "{{ lookup('template', 'rhdh-instance.yaml.j2') }}"
+- name: Deploy RHDH Helm Chart with values loaded from template
+  ansible.builtin.shell: |
+    helm repo update
+    helm upgrade -i developer-hub \
+      -f "/tmp/{{ rhdh_helm_values_file }}" \
+      openshift-helm-charts/redhat-developer-hub \
+      --version "{{ rhdh_helm_chart_version }}" \
+      --namespace '{{ cluster_project }}'
+
+# - name: Create RHDH Operator Group
+#   k8s:
+#     state: present
+#     namespace: '{{ cluster_project }}'
+#     resource_definition: "{{ lookup('template', 'rhdh-operatorgroup.yaml.j2') }}"
+
+# - name: Create RHDH Subscription
+#   k8s:
+#     state: present
+#     namespace: '{{ cluster_project }}'
+#     resource_definition: "{{ lookup('template', 'rhdh-subscription.yaml.j2') }}"
+
+# - name: Wait for RHDH operator to install
+#   k8s_info:
+#     api_version: apiextensions.k8s.io/v1
+#     kind: CustomResourceDefinition
+#     name: backstages.rhdh.redhat.com
+#     namespace: '{{ cluster_project }}'
+#   register: crd_rhdh
+#   until: crd_rhdh.resources | list | length == 1
+#   retries: 10
+#   delay: 30
+
+# - name: Create the RHDO Instance CR
+#   k8s:
+#     state: present
+#     resource_definition:  "{{ lookup('template', 'rhdh-instance.yaml.j2') }}"

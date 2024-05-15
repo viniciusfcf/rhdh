@@ -1,0 +1,68 @@
+# Fonte: https://github.com/redhat-na-ssa/redhat-developer-hub-gitops-bootstrap/blob/main/ansible-automation/playbooks/rhdh-install/templates/rhdh-app-config.yaml
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: app-config-rhdh
+  namespace: '{{ cluster_project }}'
+immutable: false
+data:
+  app-config-rhdh.yaml: |
+    app:
+      title : Red Hat Developer Hub
+      # branding:
+      #   fullLogo: ${BASE64_EMBEDDED_FULL_LOGO}
+      #   iconLogo: ${BASE64_EMBEDDED_ICON_LOGO}
+      #   theme:
+      #     light:
+      #       # primaryColor: ${PRIMARY_LIGHT_COLOR}
+      #       headerColor1: '#010101'
+      #       headerColor2: '#010101'
+      #       # navigationIndicatorColor: ${NAV_INDICATOR_LIGHT_COLOR}
+      #     dark:
+      #       # primaryColor: ${PRIMARY_DARK_COLOR}
+      #       headerColor1: '#010101'
+      #       headerColor2: '#010101'
+      #       # navigationIndicatorColor: ${NAV_INDICATOR_DARK_COLOR}
+    backend:
+      csp:
+        connect-src:
+        - '''self'''
+        - 'http:'
+        - 'https:'
+      reading:
+        allow:
+        - host: '*.opentlc.com'
+    integrations:
+    auth:
+      environment: development # production to disable Guest Login
+      # The session secret is for a session store and is a requirement for some of the auth providers (eg. OIDC).
+      session:
+        secret: ${SESSION_SECRET} # It can be a string like mySuperSecret
+      providers:
+        # #https://github.com/janus-idp/backstage-showcase/blob/main/showcase-docs/auth.md#oidc
+        # https://backstage.io/docs/auth/oidc/#the-configuration
+        # oidc:
+        #   development:
+        #     metadataUrl: ${AUTH_OIDC_METADATA_URL} #https://kecloakurl/auth/realms/rhdh/.well-known/openid-configuration
+        #     clientId: ${AUTH_OIDC_CLIENT_ID}
+        #     clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
+        #     prompt: ${AUTH_OIDC_PROMPT} # recommended to use auto
+        #     ## uncomment for additional configuration options
+        #     # callbackUrl: ${AUTH_OIDC_CALLBACK_URL}
+        #     # tokenEndpointAuthMethod: ${AUTH_OIDC_TOKEN_ENDPOINT_METHOD}
+        #     # tokenSignedResponseAlg: ${AUTH_OIDC_SIGNED_RESPONSE_ALG}
+        #     # scope: ${AUTH_OIDC_SCOPE}
+    signInPage: oidc # gitlab
+
+    proxy:
+      endpoints:
+        # customize developer hub instance
+        #/developer-hub:
+        #  target: https://raw.githubusercontent.com/
+        #  pathRewrite:
+        #    '^/api/proxy/developer-hub/tech-radar': /redhat-na-ssa/backstage-customization-provider/main/data/tech-radar/data.json
+        #    '^/api/proxy/developer-hub': /redhat-na-ssa/backstage-customization-provider/main/data/home/data.json
+        #  changeOrigin: true
+        #  secure: true # Change to "false" in case of using self hosted cluster with a self-signed certificate
+        #  #headers:
+        #  #  <HEADER_KEY>: <HEADER_VALUE> # optional and can be passed as needed i.e Authorization can be passed for private GitHub repo and PRIVATE-TOKEN can be passed for private GitLab repo
