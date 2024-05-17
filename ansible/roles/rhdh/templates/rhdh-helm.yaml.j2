@@ -21,6 +21,8 @@ global:
         disabled: false
       - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-keycloak-backend-dynamic
         disabled: false
+      - package: ./dynamic-plugins/dist/janus-idp-backstage-plugin-rbac
+        disabled: false
 route:
   annotations: {}
   enabled: true
@@ -84,11 +86,11 @@ upstream:
       - name: SESSION_SECRET
         value: 'superSecretSession'
       - name: AUTH_OIDC_CLIENT_SECRET
-        value: ibpt0XiadE5XFNVQ4xnvhssk50aEWWVs
+        value: r4qGat8GNJKDnABd8mNusjDwE65t8hUl
       - name: AUTH_OIDC_METADATA_URL
-        value: https://keycloak-rhbk.apps.cluster-m998k.sandbox1967.opentlc.com/realms/rhdh/.well-known/openid-configuration
+        value: https://keycloak-rhbk.apps.{{ domain }}/realms/rhdh/.well-known/openid-configuration
       - name: KEYCLOAK_BASE_URL
-        value: https://keycloak-rhbk.apps.cluster-m998k.sandbox1967.opentlc.com/
+        value: https://keycloak-rhbk.apps.{{ domain }}/
       - name: KEYCLOAK_LOGIN_REALM
         value: rhdh
       - name: KEYCLOAK_REALM
@@ -96,7 +98,7 @@ upstream:
       - name: KEYCLOAK_CLIENT_ID
         value: rhdh
       - name: KEYCLOAK_CLIENT_SECRET
-        value: ibpt0XiadE5XFNVQ4xnvhssk50aEWWVs
+        value: r4qGat8GNJKDnABd8mNusjDwE65t8hUl
       
     extraAppConfig:
       - configMapRef: app-config-rhdh
@@ -179,11 +181,11 @@ upstream:
         - name: OAUTH2_PROXY_CLIENT_ID
           value: rhdh
         - name: OAUTH2_PROXY_CLIENT_SECRET
-          value: ibpt0XiadE5XFNVQ4xnvhssk50aEWWVs
+          value: r4qGat8GNJKDnABd8mNusjDwE65t8hUl
         - name: OAUTH2_PROXY_COOKIE_SECRET
           value: 'superSecretCookieValue'
         - name: OAUTH2_PROXY_OIDC_ISSUER_URL
-          value: https://keycloak-rhbk.apps.cluster-m998k.sandbox1967.opentlc.com/realms/rhdh
+          value: https://keycloak-rhbk.apps.{{ domain }}/realms/rhdh
         - name: OAUTH2_PROXY_SSL_INSECURE_SKIP_VERIFY
           value: 'true'
         - name: NODE_TLS_REJECT_UNAUTHORIZED
@@ -203,9 +205,9 @@ upstream:
     tls:
       enabled: false
   keycloak:
-    baseUrl: 'https://keycloak-rhbk.apps.cluster-m998k.sandbox1967.opentlc.com/'
+    baseUrl: 'https://keycloak-rhbk.apps.{{ domain }}/'
     clientId: rhdh
-    clientSecret: ibpt0XiadE5XFNVQ4xnvhssk50aEWWVs
+    clientSecret: r4qGat8GNJKDnABd8mNusjDwE65t8hUl
     cookieSecret: ''
     realm: rhdh
   nameOverride: developer-hub

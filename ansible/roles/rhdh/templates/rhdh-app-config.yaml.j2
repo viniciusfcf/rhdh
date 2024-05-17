@@ -14,15 +14,15 @@ data:
       #   iconLogo: ${BASE64_EMBEDDED_ICON_LOGO}
       #   theme:
       #     light:
-      #       # primaryColor: ${PRIMARY_LIGHT_COLOR}
-      #       headerColor1: '#010101'
-      #       headerColor2: '#010101'
-      #       # navigationIndicatorColor: ${NAV_INDICATOR_LIGHT_COLOR}
+      #       primaryColor: ${PRIMARY_LIGHT_COLOR}
+      #       headerColor1: ${HEADER_LIGHT_COLOR_1}
+      #       headerColor2: ${HEADER_LIGHT_COLOR_2}
+      #       navigationIndicatorColor: ${NAV_INDICATOR_LIGHT_COLOR}
       #     dark:
-      #       # primaryColor: ${PRIMARY_DARK_COLOR}
-      #       headerColor1: '#010101'
-      #       headerColor2: '#010101'
-      #       # navigationIndicatorColor: ${NAV_INDICATOR_DARK_COLOR}
+      #       primaryColor: ${PRIMARY_DARK_COLOR}
+      #       headerColor1: ${HEADER_DARK_COLOR_1}
+      #       headerColor2: ${HEADER_DARK_COLOR_2}
+      #       navigationIndicatorColor: ${NAV_INDICATOR_DARK_COLOR}
     backend:
       csp:
         connect-src:
@@ -33,6 +33,7 @@ data:
         allow:
         - host: '*.opentlc.com'
     integrations:
+      # empty
     auth:
       environment: production # production to disable Guest Login
       # The session secret is for a session store and is a requirement for some of the auth providers (eg. OIDC).
@@ -45,9 +46,27 @@ data:
             clientId: ${AUTH_OIDC_CLIENT_ID}
             clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
             prompt: auto
-    signInPage: oidc # gitlab
-
-    proxy:
+    signInPage: oidc
+    permission:
+      enabled: true
+      rbac:
+        admin:
+          users:
+            - name: user:default/user1
+    
+    catalog:
+      providers:
+        keycloakOrg:
+          default:
+            # highlight-add-start
+            schedule: # optional; same options as in TaskScheduleDefinition
+              # supports cron, ISO duration, "human duration" as used in code
+              frequency: { minutes: 1 }
+              # supports ISO duration, "human duration" as used in code
+              timeout: { minutes: 1 }
+              initialDelay: { seconds: 15 }
+              # highlight-add-end
+      proxy:
       endpoints:
         # customize developer hub instance
         #/developer-hub:

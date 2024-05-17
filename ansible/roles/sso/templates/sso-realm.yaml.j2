@@ -63,24 +63,24 @@ spec:
           - uma_authorization
           client:
             account:
-            - view-profile
             - manage-account
+            - view-profile
         clientRole: false
-        containerId: 4e7314a1-9483-454f-be0e-8bf59fd0be6a
+        containerId: rhdh
         attributes: {}
       - id: f452548a-6976-4181-9985-f242a504c01f
         name: uma_authorization
         description: "${role_uma_authorization}"
         composite: false
         clientRole: false
-        containerId: 4e7314a1-9483-454f-be0e-8bf59fd0be6a
+        containerId: rhdh
         attributes: {}
       - id: 935ec592-f2d1-4ff6-83eb-6974b50b2247
         name: offline_access
         description: "${role_offline-access}"
         composite: false
         clientRole: false
-        containerId: 4e7314a1-9483-454f-be0e-8bf59fd0be6a
+        containerId: rhdh
         attributes: {}
       client:
         realm-management:
@@ -208,11 +208,11 @@ spec:
           composites:
             client:
               realm-management:
-              - view-events
               - manage-realm
+              - view-events
               - manage-authorization
-              - view-authorization
               - manage-users
+              - view-authorization
               - manage-identity-providers
               - query-realms
               - impersonation
@@ -223,8 +223,8 @@ spec:
               - view-realm
               - manage-events
               - query-clients
-              - view-clients
               - manage-clients
+              - view-clients
               - create-client
           clientRole: true
           containerId: c8a127e7-c6ed-4b42-a8bb-9baf35ff9c06
@@ -324,14 +324,21 @@ spec:
           containerId: 4a7289cc-0e2a-47aa-bfab-faeaa11a3c46
           attributes: {}
         rhdh: []
-    groups: []
+    groups:
+    - id: 20368525-7227-4338-bd1c-42f9edb80ea3
+      name: dev
+      path: "/dev"
+      subGroups: []
+      attributes: {}
+      realmRoles: []
+      clientRoles: {}
     defaultRole:
       id: 1515630d-e2b6-40f2-bde1-963c825d6a97
       name: default-roles-rhdh
       description: "${role_default-roles}"
       composite: true
       clientRole: false
-      containerId: 4e7314a1-9483-454f-be0e-8bf59fd0be6a
+      containerId: rhdh
     requiredCredentials:
     - password
     otpPolicyType: totp
@@ -503,7 +510,8 @@ spec:
       publicClient: true
       frontchannelLogout: false
       protocol: openid-connect
-      attributes: {}
+      attributes:
+        post.logout.redirect.uris: "+"
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
@@ -537,7 +545,8 @@ spec:
       publicClient: false
       frontchannelLogout: false
       protocol: openid-connect
-      attributes: {}
+      attributes:
+        post.logout.redirect.uris: "+"
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
@@ -571,7 +580,8 @@ spec:
       publicClient: false
       frontchannelLogout: false
       protocol: openid-connect
-      attributes: {}
+      attributes:
+        post.logout.redirect.uris: "+"
       authenticationFlowBindingOverrides: {}
       fullScopeAllowed: false
       nodeReRegistrationTimeout: 0
@@ -614,7 +624,7 @@ spec:
       protocol: openid-connect
       attributes:
         oidc.ciba.grant.enabled: 'false'
-        client.secret.creation.time: '1715707966'
+        client.secret.creation.time: '1715801491'
         backchannel.logout.session.required: 'true'
         post.logout.redirect.uris: "*"
         oauth2.device.authorization.grant.enabled: 'false'
@@ -631,6 +641,7 @@ spec:
         config:
           user.session.note: clientHost
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientHost
@@ -643,9 +654,24 @@ spec:
         config:
           user.session.note: client_id
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: client_id
+          jsonType.label: String
+      - id: 417f35ce-957c-4a07-a04b-7c3c71698113
+        name: rhdh-uid
+        protocol: openid-connect
+        protocolMapper: oidc-usermodel-property-mapper
+        consentRequired: false
+        config:
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
+          user.attribute: username
+          id.token.claim: 'true'
+          lightweight.claim: 'false'
+          access.token.claim: 'true'
+          claim.name: sub
           jsonType.label: String
       - id: d56d2595-af61-4567-a930-30dec7c81c49
         name: Client IP Address
@@ -655,6 +681,7 @@ spec:
         config:
           user.session.note: clientAddress
           introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
           id.token.claim: 'true'
           access.token.claim: 'true'
           claim.name: clientAddress
@@ -1024,8 +1051,9 @@ spec:
         consentRequired: false
         config:
           id.token.claim: 'true'
-          introspection.token.claim: 'true'
           access.token.claim: 'true'
+          introspection.token.claim: 'true'
+          userinfo.token.claim: 'true'
     - id: ae80a287-cee9-465f-9795-a1cb76ca0735
       name: role_list
       description: SAML role list
@@ -1079,6 +1107,7 @@ spec:
         config:
           introspection.token.claim: 'true'
           multivalued: 'true'
+          userinfo.token.claim: 'true'
           user.attribute: foo
           id.token.claim: 'true'
           access.token.claim: 'true'
@@ -1123,8 +1152,8 @@ spec:
         protocolMapper: oidc-audience-resolve-mapper
         consentRequired: false
         config:
-          introspection.token.claim: 'true'
           access.token.claim: 'true'
+          introspection.token.claim: 'true'
     - id: '006109f9-5a72-4c44-b88f-f0d3abc0ca74'
       name: web-origins
       description: OpenID Connect scope for add allowed web origins to the access token
@@ -1140,8 +1169,8 @@ spec:
         protocolMapper: oidc-allowed-origins-mapper
         consentRequired: false
         config:
-          introspection.token.claim: 'true'
           access.token.claim: 'true'
+          introspection.token.claim: 'true'
     defaultDefaultClientScopes:
     - role_list
     - profile
@@ -1199,14 +1228,14 @@ spec:
         subComponents: {}
         config:
           allowed-protocol-mapper-types:
-          - oidc-usermodel-property-mapper
-          - oidc-full-name-mapper
-          - oidc-usermodel-attribute-mapper
-          - oidc-address-mapper
-          - saml-role-list-mapper
           - saml-user-property-mapper
           - oidc-sha256-pairwise-sub-mapper
+          - oidc-usermodel-attribute-mapper
+          - oidc-address-mapper
+          - oidc-usermodel-property-mapper
+          - oidc-full-name-mapper
           - saml-user-attribute-mapper
+          - saml-role-list-mapper
       - id: 1a8e61a1-b127-41dd-86d3-22854a5e96a6
         name: Max Clients Limit
         providerId: max-clients
@@ -1229,13 +1258,13 @@ spec:
         config:
           allowed-protocol-mapper-types:
           - saml-user-property-mapper
-          - oidc-sha256-pairwise-sub-mapper
-          - oidc-usermodel-property-mapper
-          - oidc-full-name-mapper
-          - saml-user-attribute-mapper
-          - oidc-address-mapper
           - saml-role-list-mapper
+          - oidc-usermodel-property-mapper
+          - oidc-sha256-pairwise-sub-mapper
           - oidc-usermodel-attribute-mapper
+          - saml-user-attribute-mapper
+          - oidc-full-name-mapper
+          - oidc-address-mapper
       - id: b1c89517-7aaa-4514-983c-41a9bdae6286
         name: Consent Required
         providerId: consent-required
@@ -1769,4 +1798,17 @@ spec:
       cibaExpiresIn: '120'
       cibaAuthRequestedUserHint: login_hint
       oauth2DeviceCodeLifespan: '600'
+      clientOfflineSessionMaxLifespan: '0'
       oauth2DevicePollingInterval: '5'
+      clientSessionIdleTimeout: '0'
+      parRequestUriLifespan: '60'
+      clientSessionMaxLifespan: '0'
+      clientOfflineSessionIdleTimeout: '0'
+      cibaInterval: '5'
+      realmReusableOtpCode: 'false'
+    keycloakVersion: 24.0.3.redhat-00004
+    userManagedAccessAllowed: false
+    clientProfiles:
+      profiles: []
+    clientPolicies:
+      policies: []
