@@ -104,8 +104,6 @@ spec:
               type: string
               description: Your SCM host
               default: gitlab-gitlab.apps.cluster-mnbpr.sandbox730.opentlc.com
-              enum:
-                - gitlab-gitlab.apps.cluster-mnbpr.sandbox730.opentlc.com
             owner:
               title: Repo Owner
               type: string
