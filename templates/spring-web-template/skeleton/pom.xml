@@ -11,15 +11,15 @@
     <description>${{values.description}}</description>
 
     <properties>
-        <compiler-plugin.version>3.8.1</compiler-plugin.version>
-        <maven.compiler.release>11</maven.compiler.release>
+        <compiler-plugin.version>3.12.1</compiler-plugin.version>
+        <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>2.11.3.Final</quarkus.platform.version>
+        <quarkus.platform.version>3.10.1</quarkus.platform.version>
         <skipITs>true</skipITs>
-        <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
+        <surefire-plugin.version>3.2.5</surefire-plugin.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -34,26 +34,46 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-resteasy</artifactId>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-arc</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-openapi</artifactId>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-spring-cache</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-arc</artifactId>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-spring-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-junit5</artifactId>
-            <scope>test</scope>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-spring-scheduled</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <scope>test</scope>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-spring-di</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-spring-web</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-spring-boot-properties</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-resteasy-jackson</artifactId>
+        </dependency>
+        <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-junit5</artifactId>
+        <scope>test</scope>
+        </dependency>
+        <dependency>
+        <groupId>io.rest-assured</groupId>
+        <artifactId>rest-assured</artifactId>
+        <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
