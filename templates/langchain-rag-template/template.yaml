@@ -21,7 +21,7 @@ spec:
         component_id:
           title: Name
           type: string
-          description: Unique name of the component
+          description: Unique name of the component!
           default: my-quarkus-app
           ui:field: EntityNamePicker
           maxLength: 14
