@@ -3,8 +3,8 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   labels:
-    {{- include "spring-template.labels" $ | nindent 4 }}
-  name: {{ include "spring-template.fullname" $ }}
+    {{- include "quarkus-template.labels" $ | nindent 4 }}
+  name: {{ include "quarkus-template.fullname" $ }}
 spec:
   {{- if .host }}
   host: {{ .host }}
@@ -16,7 +16,7 @@ spec:
     targetPort: {{ $.Values.service.port }}
   to:
     kind: Service
-    name: {{ include "spring-template.fullname" $ }}
+    name: {{ include "quarkus-template.fullname" $ }}
   tls:
     termination: edge
   wildcardPolicy: None

@@ -12,7 +12,7 @@ spec:
       description: The owner of the repo
       name: git-owner
       type: string
-    - default: my-spring-app
+    - default: my-quarkus-app
       description: The name of the component
       name: component-id
       type: string

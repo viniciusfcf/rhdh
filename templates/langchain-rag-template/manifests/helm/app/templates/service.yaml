@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "spring-template.fullname" . }}
+  name: {{ include "quarkus-template.fullname" . }}
   labels:
-    {{- include "spring-template.labels" . | nindent 4 }}
+    {{- include "quarkus-template.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "spring-template.selectorLabels" . | nindent 4 }}
+    {{- include "quarkus-template.selectorLabels" . | nindent 4 }}
