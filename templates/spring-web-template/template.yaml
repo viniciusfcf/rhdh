@@ -79,7 +79,7 @@ spec:
                 image_host:
                   title: Image Host
                   type: string
-                  description: Host for storing image
+                  description: Host for storing image.
                   default: quay-mnbpr.apps.cluster-mnbpr.sandbox730.opentlc.com
                 image_organization:
                   title: Organization
