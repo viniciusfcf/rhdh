@@ -1,0 +1,1 @@
+podman push <IMAGE_ID> docker://docker.io/viniciusfcf/langchain4j-huggingface-jvm
