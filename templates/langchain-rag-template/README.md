@@ -1,6 +1,7 @@
 # Lembrar que é necessário alterar o caminho do gitlab, ex:
 - Antigo: gitlab-gitlab.apps.cluster-ls2rb.sandbox1924.opentlc.com
 - Novo: gitlab-gitlab.apps.cluster-mnbpr.sandbox730.opentlc.com
+- alterar o endereço do quay tb
 - O endereço novo está no demo criado pelo demo.redhat.com
 
 

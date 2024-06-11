@@ -4,7 +4,7 @@ metadata:
   name: update-deployment
 spec:
   params:
-    - default: gitlab-gitlab.apps.cluster-jh82x.sandbox1737.opentlc.com
+    - default: gitlab-gitlab.apps.cluster-7zw5v.sandbox867.opentlc.com
       description: The hostname of the git instance
       name: git-host
       type: string
@@ -26,7 +26,7 @@ spec:
     - description: Newest image tag
       name: image-tag
       type: string
-    - default: argocd-server-janus-argocd.apps.cluster-jh82x.sandbox1737.opentlc.com
+    - default: argocd-server-janus-argocd.apps.cluster-7zw5v.sandbox867.opentlc.com
       description: ArgoCD host
       name: argocd-host
       type: string
