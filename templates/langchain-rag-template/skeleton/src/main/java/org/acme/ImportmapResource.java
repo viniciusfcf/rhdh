@@ -43,10 +43,10 @@ public class ImportmapResource {
         this.importmap = aggregator.aggregateAsJson();
     }
 
-    private static final String JAVASCRIPT_CODE = """
-            const im = document.createElement('script');
-            im.type = 'importmap';
-            im.textContent = JSON.stringify(%s);
-            document.currentScript.after(im);
-            """;
+    private static final String JAVASCRIPT_CODE = 
+            "const im = document.createElement('script');"+
+            "im.type = 'importmap';"+
+            "im.textContent = JSON.stringify(%s);"+
+            "document.currentScript.after(im);"
+            ;
 }
