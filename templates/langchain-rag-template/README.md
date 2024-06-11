@@ -13,3 +13,7 @@ This repository contains the Backstage Template used to create the Kubernetes re
 
 Follow the steps to configure the OpenShift properly: https://github.com/viniciusfcf/ai-sandbox/tree/main/rhoai/demo-rag
 
+# atualizar RHDH
+
+Adicionar target ao arquivo: https://gitlab-gitlab.apps.cluster-mnbpr.sandbox730.opentlc.com/rhdh/software-templates/-/blob/main/showcase-templates.yaml
+https://github.com/viniciusfcf/rhdh/blob/master/templates/langchain-rag-template/template.yaml
