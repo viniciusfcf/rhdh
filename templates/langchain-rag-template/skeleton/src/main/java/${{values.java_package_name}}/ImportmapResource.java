@@ -30,7 +30,7 @@ public class ImportmapResource {
     @Path("/dynamic-importmap.js")
     @Produces("application/javascript")
     public String importMapJson() {
-        return JAVASCRIPT_CODE.formatted(this.importmap);
+        return String.format(JAVASCRIPT_CODE, this.importmap);
     }
 
     @PostConstruct
