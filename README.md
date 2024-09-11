@@ -139,7 +139,6 @@ extraEnvVars: (already exists in, upstream.backstage.)
 
 ## Keycloak User
 - Create new user in backstage realm in Keycloak with username, e-mail, Email verified (Yes) and password
-- 
 
 
 # Issues
@@ -147,7 +146,7 @@ extraEnvVars: (already exists in, upstream.backstage.)
 ## 1
 
 After configure Keycloak in Backstage:
-
+```
 [2m2024-01-15T14:06:51.525Z[22m [34mbackstage[39m [32minfo[39m Adding plugin "catalog" to backend... 
 /opt/app-root/src/node_modules/@backstage/config/dist/index.cjs.js:305
       throw new Error(errors.missing(this.fullKey(key)));
@@ -167,11 +166,13 @@ Error: Missing required config value at 'catalog.providers.keycloakOrg.default.b
     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
     at async addPlugin (/opt/app-root/src/packages/backend/dist/index.cjs.js:692:31)
     at async main (/opt/app-root/src/packages/backend/dist/index.cjs.js:783:3)
+```
 
 Fix:
     Configure keycloakOrg in the ConfigMap
 
 Example
+
     ```
     catalog:
       providers:
@@ -186,20 +187,20 @@ Example
 
 
 ## 2
-
+```
 2024-01-15T14:34:04.926Z catalog error Error while syncing Keycloak users and groups self-signed certificate type=plugin class=KeycloakOrgEntityProvider taskId=KeycloakOrgEntityProvider:default:refresh taskInstanceId=70a0e61d-b1e5-4ecf-93de-be4ca72b3daa name=Error stack=Error: self-signed certificate
 at TLSSocket.onConnectSecure (node:_tls_wrap:1600:34)
 at TLSSocket.emit (node:events:517:28)
 at TLSSocket._finishInit (node:_tls_wrap:1017:8)
 at ssl.onhandshakedone (node:_tls_wrap:803:12) status=undefined
-
+```
 Fix:
      
-     ```
+  ```
 extraEnvVars: (already exists in, upstream.backstage.)
   - name: NODE_TLS_REJECT_UNAUTHORIZED
     value: '0'
-     ```
+  ```
 
 
 
