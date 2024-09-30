@@ -29,7 +29,7 @@ Steps to configure Keycloak and RHDH (Red Hat Developer Hub) to use in a PoC
 - Create and Configure ConfigMap
   - https://access.redhat.com/documentation/en-us/red_hat_developer_hub/1.0/html/getting_started_with_red_hat_developer_hub/ref-rhdh-supported-configs_rhdh-getting-started#proc-add-custom-app-file-openshift_rhdh-getting-started
 
-    ```
+```
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -52,12 +52,12 @@ data:
             realm: ${KEYCLOAK_REALM}
             clientId: ${KEYCLOAK_CLIENTID}
             clientSecret: ${KEYCLOAK_CLIENTSECRET}
-    ```
+```
 
 
 ## Configure Helm
 
-  ```
+```
     keycloak:
         baseUrl: 'https://keycloak-backstage.apps.cluster-kg2fs.dynamic.redhatworkshops.io'
         clientId: backstage
