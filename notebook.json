@@ -1,124 +1,257 @@
 {
-    "apiVersion":"kubeflow.org/v1",
-    "kind":"Notebook",
-    "metadata":{
-       "labels":{
-          "app":"my-new-workbench",
-          "opendatahub.io/odh-managed":"true",
-          "opendatahub.io/user":"user2",
-          "opendatahub.io/dashboard":"true"
-       },
-       "annotations":{
-          "openshift.io/display-name":"my-new-workbench",
-          "openshift.io/description":"",
-          "notebooks.opendatahub.io/oauth-logout-url":"https://rhods-dashboard-redhat-ods-applications.apps.cluster-kfg6p.kfg6p.sandbox2010.opentlc.com/projects/deteccao-de-fraude?notebookLogout=my-new-workbench",
-          "notebooks.opendatahub.io/last-size-selection":"Standard",
-          "notebooks.opendatahub.io/last-image-selection":"s2i-minimal-notebook:2024.1",
-          "notebooks.opendatahub.io/inject-oauth":"true",
-          "opendatahub.io/username":"user2",
-          "opendatahub.io/accelerator-name":"",
-          "opendatahub.io/image-display-name":"Minimal Python"
-       },
-       "name":"my-new-workbench",
-       "namespace":"deteccao-de-fraude"
+    "apiVersion": "kubeflow.org/v1",
+    "kind": "Notebook",
+    "metadata": {
+        "annotations": {
+            "kubeflow-resource-stopped": "odh-notebook-controller-lock",
+            "notebooks.opendatahub.io/inject-oauth": "true",
+            "notebooks.opendatahub.io/last-image-selection": "s2i-minimal-notebook:2024.1",
+            "notebooks.opendatahub.io/last-size-selection": "Standard",
+            "notebooks.opendatahub.io/oauth-logout-url": "https://rhods-dashboard-redhat-ods-applications.apps.cluster-kfg6p.kfg6p.sandbox2010.opentlc.com/projects/deteccao-de-fraude?notebookLogout=my-workbench-name",
+            "opendatahub.io/accelerator-name": "",
+            "opendatahub.io/image-display-name": "Minimal Python",
+            "opendatahub.io/username": "user2",
+            "openshift.io/description": "",
+            "openshift.io/display-name": "my-workbench-name"
+        },
+        "creationTimestamp": "2025-01-07T23:54:28Z",
+        "generation": 1,
+        "labels": {
+            "app": "my-workbench-name",
+            "opendatahub.io/dashboard": "true",
+            "opendatahub.io/odh-managed": "true",
+            "opendatahub.io/user": "user2"
+        },
+        "name": "my-workbench-name",
+        "namespace": "deteccao-de-fraude",
+        "resourceVersion": "2243604",
+        "uid": "41508fe9-9d38-4c0c-9230-b73e9f1cb158"
     },
-    "spec":{
-       "template":{
-          "spec":{
-             "affinity":{
-                
-             },
-             "enableServiceLinks":false,
-             "containers":[
-                {
-                   "image":"image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-minimal-notebook:2024.1",
-                   "imagePullPolicy":"Always",
-                   "workingDir":"/opt/app-root/src",
-                   "name":"my-new-workbench",
-                   "env":[
-                      {
-                         "name":"NOTEBOOK_ARGS",
-                         "value":"--ServerApp.port=8888\n                  --ServerApp.token=\\'\\'\n                  --ServerApp.password=\\'\\'\n                  --ServerApp.base_url=/notebook/deteccao-de-fraude/my-new-workbench\n                  --ServerApp.quit_button=False\n                  --ServerApp.tornado_settings={\"user\":\"user2\",\"hub_host\":\"https://rhods-dashboard-redhat-ods-applications.apps.cluster-kfg6p.kfg6p.sandbox2010.opentlc.com\",\"hub_prefix\":\"/projects/deteccao-de-fraude\"}"
-                      },
-                      {
-                         "name":"JUPYTER_IMAGE",
-                         "value":"image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-minimal-notebook:2024.1"
-                      }
-                   ],
-                   "envFrom":[
-                      
-                   ],
-                   "resources":{
-                      "limits":{
-                         "cpu":"2",
-                         "memory":"8Gi"
-                      },
-                      "requests":{
-                         "cpu":"1",
-                         "memory":"6Gi"
-                      }
-                   },
-                   "volumeMounts":[
-                      {
-                         "mountPath":"/opt/app-root/src",
-                         "name":"my-new-workbench"
-                      },
-                      {
-                         "name":"shm",
-                         "mountPath":"/dev/shm"
-                      }
-                   ],
-                   "ports":[
-                      {
-                         "name":"notebook-port",
-                         "containerPort":8888,
-                         "protocol":"TCP"
-                      }
-                   ],
-                   "livenessProbe":{
-                      "initialDelaySeconds":10,
-                      "periodSeconds":5,
-                      "timeoutSeconds":1,
-                      "successThreshold":1,
-                      "failureThreshold":3,
-                      "httpGet":{
-                         "scheme":"HTTP",
-                         "path":"/notebook/deteccao-de-fraude/my-new-workbench/api",
-                         "port":"notebook-port"
-                      }
-                   },
-                   "readinessProbe":{
-                      "initialDelaySeconds":10,
-                      "periodSeconds":5,
-                      "timeoutSeconds":1,
-                      "successThreshold":1,
-                      "failureThreshold":3,
-                      "httpGet":{
-                         "scheme":"HTTP",
-                         "path":"/notebook/deteccao-de-fraude/my-new-workbench/api",
-                         "port":"notebook-port"
-                      }
-                   }
-                }
-             ],
-             "volumes":[
-                {
-                   "name":"my-new-workbench",
-                   "persistentVolumeClaim":{
-                      "claimName":"my-new-workbench"
-                   }
-                },
-                {
-                   "name":"shm",
-                   "emptyDir":{
-                      "medium":"Memory"
-                   }
-                }
-             ],
-             "tolerations":[
-                
-             ]
-          }
-       }
+    "spec": {
+        "template": {
+            "spec": {
+                "affinity": {},
+                "containers": [
+                    {
+                        "env": [
+                            {
+                                "name": "NOTEBOOK_ARGS",
+                                "value": "--ServerApp.port=8888\n                  --ServerApp.token=''\n                  --ServerApp.password=''\n                  --ServerApp.base_url=/notebook/deteccao-de-fraude/my-workbench-name\n                  --ServerApp.quit_button=False\n                  --ServerApp.tornado_settings={\"user\":\"user2\",\"hub_host\":\"https://rhods-dashboard-redhat-ods-applications.apps.cluster-kfg6p.kfg6p.sandbox2010.opentlc.com\",\"hub_prefix\":\"/projects/deteccao-de-fraude\"}"
+                            },
+                            {
+                                "name": "JUPYTER_IMAGE",
+                                "value": "image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-minimal-notebook:2024.1"
+                            },
+                            {
+                                "name": "PIP_CERT",
+                                "value": "/etc/pki/tls/custom-certs/ca-bundle.crt"
+                            },
+                            {
+                                "name": "REQUESTS_CA_BUNDLE",
+                                "value": "/etc/pki/tls/custom-certs/ca-bundle.crt"
+                            },
+                            {
+                                "name": "SSL_CERT_FILE",
+                                "value": "/etc/pki/tls/custom-certs/ca-bundle.crt"
+                            },
+                            {
+                                "name": "PIPELINES_SSL_SA_CERTS",
+                                "value": "/etc/pki/tls/custom-certs/ca-bundle.crt"
+                            },
+                            {
+                                "name": "GIT_SSL_CAINFO",
+                                "value": "/etc/pki/tls/custom-certs/ca-bundle.crt"
+                            }
+                        ],
+                        "image": "image-registry.openshift-image-registry.svc:5000/redhat-ods-applications/s2i-minimal-notebook:2024.1",
+                        "imagePullPolicy": "Always",
+                        "livenessProbe": {
+                            "failureThreshold": 3,
+                            "httpGet": {
+                                "path": "/notebook/deteccao-de-fraude/my-workbench-name/api",
+                                "port": "notebook-port",
+                                "scheme": "HTTP"
+                            },
+                            "initialDelaySeconds": 10,
+                            "periodSeconds": 5,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "name": "my-workbench-name",
+                        "ports": [
+                            {
+                                "containerPort": 8888,
+                                "name": "notebook-port",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "failureThreshold": 3,
+                            "httpGet": {
+                                "path": "/notebook/deteccao-de-fraude/my-workbench-name/api",
+                                "port": "notebook-port",
+                                "scheme": "HTTP"
+                            },
+                            "initialDelaySeconds": 10,
+                            "periodSeconds": 5,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "resources": {
+                            "limits": {
+                                "cpu": "2",
+                                "memory": "8Gi"
+                            },
+                            "requests": {
+                                "cpu": "1",
+                                "memory": "6Gi"
+                            }
+                        },
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/opt/app-root/src",
+                                "name": "my-workbench-name"
+                            },
+                            {
+                                "mountPath": "/dev/shm",
+                                "name": "shm"
+                            },
+                            {
+                                "mountPath": "/etc/pki/tls/custom-certs/ca-bundle.crt",
+                                "name": "trusted-ca",
+                                "readOnly": true,
+                                "subPath": "ca-bundle.crt"
+                            }
+                        ],
+                        "workingDir": "/opt/app-root/src"
+                    },
+                    {
+                        "args": [
+                            "--provider=openshift",
+                            "--https-address=:8443",
+                            "--http-address=",
+                            "--openshift-service-account=my-workbench-name",
+                            "--cookie-secret-file=/etc/oauth/config/cookie_secret",
+                            "--cookie-expire=24h0m0s",
+                            "--tls-cert=/etc/tls/private/tls.crt",
+                            "--tls-key=/etc/tls/private/tls.key",
+                            "--upstream=http://localhost:8888",
+                            "--upstream-ca=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+                            "--email-domain=*",
+                            "--skip-provider-button",
+                            "--openshift-sar={\"verb\":\"get\",\"resource\":\"notebooks\",\"resourceAPIGroup\":\"kubeflow.org\",\"resourceName\":\"my-workbench-name\",\"namespace\":\"$(NAMESPACE)\"}",
+                            "--logout-url=https://rhods-dashboard-redhat-ods-applications.apps.cluster-kfg6p.kfg6p.sandbox2010.opentlc.com/projects/deteccao-de-fraude?notebookLogout=my-workbench-name"
+                        ],
+                        "env": [
+                            {
+                                "name": "NAMESPACE",
+                                "valueFrom": {
+                                    "fieldRef": {
+                                        "fieldPath": "metadata.namespace"
+                                    }
+                                }
+                            }
+                        ],
+                        "image": "registry.redhat.io/openshift4/ose-oauth-proxy@sha256:4bef31eb993feb6f1096b51b4876c65a6fb1f4401fee97fa4f4542b6b7c9bc46",
+                        "imagePullPolicy": "Always",
+                        "livenessProbe": {
+                            "failureThreshold": 3,
+                            "httpGet": {
+                                "path": "/oauth/healthz",
+                                "port": "oauth-proxy",
+                                "scheme": "HTTPS"
+                            },
+                            "initialDelaySeconds": 30,
+                            "periodSeconds": 5,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "name": "oauth-proxy",
+                        "ports": [
+                            {
+                                "containerPort": 8443,
+                                "name": "oauth-proxy",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "failureThreshold": 3,
+                            "httpGet": {
+                                "path": "/oauth/healthz",
+                                "port": "oauth-proxy",
+                                "scheme": "HTTPS"
+                            },
+                            "initialDelaySeconds": 5,
+                            "periodSeconds": 5,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "resources": {
+                            "limits": {
+                                "cpu": "100m",
+                                "memory": "64Mi"
+                            },
+                            "requests": {
+                                "cpu": "100m",
+                                "memory": "64Mi"
+                            }
+                        },
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/etc/oauth/config",
+                                "name": "oauth-config"
+                            },
+                            {
+                                "mountPath": "/etc/tls/private",
+                                "name": "tls-certificates"
+                            }
+                        ]
+                    }
+                ],
+                "enableServiceLinks": false,
+                "serviceAccountName": "my-workbench-name",
+                "volumes": [
+                    {
+                        "name": "my-workbench-name",
+                        "persistentVolumeClaim": {
+                            "claimName": "my-workbench-name"
+                        }
+                    },
+                    {
+                        "emptyDir": {
+                            "medium": "Memory"
+                        },
+                        "name": "shm"
+                    },
+                    {
+                        "configMap": {
+                            "items": [
+                                {
+                                    "key": "ca-bundle.crt",
+                                    "path": "ca-bundle.crt"
+                                }
+                            ],
+                            "name": "workbench-trusted-ca-bundle",
+                            "optional": true
+                        },
+                        "name": "trusted-ca"
+                    },
+                    {
+                        "name": "oauth-config",
+                        "secret": {
+                            "defaultMode": 420,
+                            "secretName": "my-workbench-name-oauth-config"
+                        }
+                    },
+                    {
+                        "name": "tls-certificates",
+                        "secret": {
+                            "defaultMode": 420,
+                            "secretName": "my-workbench-name-tls"
+                        }
+                    }
+                ]
+            }
+        }
     }
- }
+}
