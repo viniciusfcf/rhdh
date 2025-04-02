@@ -1,0 +1,102 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: kafka-topic
+  title: Kafka Topic
+  description: Create a Kafka Topic
+  tags:
+    - recommended
+    - kafka
+    - topic
+spec:
+  owner: rhdh
+  type: resource
+  parameters:
+    - title: Provide Information for Kafka
+      required:
+        - topic_name
+      properties:
+        topic_name:
+          title: Name
+          type: string
+          description: Unique name of the topic
+          default: my-topic
+          ui:field: EntityNamePicker
+          maxLength: 23
+    - title: Application repository Information
+      required:
+        - repo
+      properties:
+        repo:
+          title: Repository Location
+          type: object
+          properties:
+            host:
+              title: Repo Host
+              type: string
+              description: Your SCM host
+              default: gitlab-gitlab.apps.cluster-p5jz2.p5jz2.sandbox632.opentlc.com
+              enum:
+                - gitlab-gitlab.apps.cluster-p5jz2.p5jz2.sandbox632.opentlc.com
+            owner:
+              title: Repo Owner
+              type: string
+              description: Your SCM host organization/group
+              default: development
+              enum:
+                - development
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        copyWithoutTemplating:
+          - .github/workflows/*
+        values:
+          topic_name: ${{ parameters.topic_name }}
+    - id: publish
+      name: Publish
+      action: publish:gitlab
+      input:
+        repoUrl: ${{ parameters.repo.host }}?owner=${{ parameters.repo.owner
+          }}&repo=${{parameters.topic_name}}
+        repoVisibility: public
+    - id: template-gitops-deployment
+      name: Generating Deployment Resources
+      action: fetch:template
+      input:
+        url: ./manifests
+        copyWithoutTemplating: []
+        values:
+          topic_name: ${{ parameters.topic_name }}
+        targetPath: ./tenant-gitops
+    - id: publish-gitops
+      name: Publishing to Resource Repository
+      action: publish:gitlab
+      input:
+        repoUrl: ${{ parameters.repo.host }}?owner=${{ parameters.repo.owner
+          }}&repo=${{parameters.topic_name}}-gitops
+        title: gitops resources for ${{ parameters.topic_name }}
+        description: gitops resources for ${{ parameters.topic_name }}
+        sourcePath: ./tenant-gitops
+        repoVisibility: public
+    - id: create-argocd-resources
+      name: Create ArgoCD Resources
+      action: argocd:create-resources
+      input:
+        appName: ${{ parameters.topic_name }}-bootstrap
+        argoInstance: main
+        namespace: janus-argocd
+        repoUrl: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{
+          parameters.topic_name }}-gitops.git
+        path: argocd/
+  output:
+    links:
+      - title: Source Code Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Gitops Repository
+        url: ${{ steps.publish.output.remoteUrl }}-gitops
+      - title: Open Component in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}

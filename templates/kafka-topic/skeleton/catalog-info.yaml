@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ${{values.topic_name}}
+  description: ${{values.description}}
+spec:
+  type: kafka-topic
+  dependencyOf:
+    - component:my-quarkus-app
