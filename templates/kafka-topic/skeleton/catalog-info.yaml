@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
   name: ${{values.topic_name}}
-  description: "A cool kafka topic"
+  description: ${{values.description}}
 spec:
   type: kafka-topic
   owner: "user1"
