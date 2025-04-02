@@ -23,6 +23,11 @@ spec:
           default: my-topic
           ui:field: EntityNamePicker
           maxLength: 23
+        description:
+          title: Description
+          type: string
+          description: Help others understand what this topic is for.
+          default: A cool kafka topic
     - title: Application repository Information
       required:
         - repo
@@ -55,6 +60,7 @@ spec:
           - .github/workflows/*
         values:
           topic_name: ${{ parameters.topic_name }}
+          description: ${{ parameters.description }}
     - id: publish
       name: Publish
       action: publish:gitlab
