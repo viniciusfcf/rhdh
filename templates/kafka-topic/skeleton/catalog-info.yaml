@@ -5,6 +5,6 @@ metadata:
   description: ${{values.description}}
 spec:
   type: kafka-topic
-  owner: ${{ values.owner }}
+  owner: "user1"
   dependencyOf:
     - component:my-quarkus-app
