@@ -71,6 +71,7 @@ spec:
         values:
           topic_name: ${{ parameters.topic_name }}
           description: ${{ parameters.description }}
+          topic_component: ${{ parameters.topic_component }}
     - id: publish
       name: Publish
       action: publish:gitlab

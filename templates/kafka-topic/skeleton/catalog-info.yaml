@@ -7,4 +7,4 @@ spec:
   type: kafka-topic
   owner: "user1"
   dependencyOf:
-    - component:my-quarkus-app
+    - ${{values.topic_component}}
