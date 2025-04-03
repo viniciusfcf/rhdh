@@ -83,6 +83,8 @@ spec:
         copyWithoutTemplating: []
         values:
           topic_name: ${{ parameters.topic_name }}
+          destination: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.component_id}}-gitops.git
+          source_repository: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.topic_name}}.git
         targetPath: ./tenant-gitops
     - id: publish-gitops
       name: Publishing to Resource Repository
