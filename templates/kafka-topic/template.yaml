@@ -16,7 +16,7 @@ spec:
     required:
       - topic_name
       - description
-      - topic_component
+      - topic
     properties:
       topic_name:
         title: Name
@@ -30,7 +30,7 @@ spec:
         type: string
         description: Help others understand what this topic is for.
         default: A cool kafka topic
-      topic_component:
+      topic:
         title: Component
         type: string
         description: Component of the topic
@@ -38,6 +38,7 @@ spec:
         ui:options:
           catalogFilter:
             - kind: Component
+            
     - title: Application repository Information
       required:
         - repo
