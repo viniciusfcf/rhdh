@@ -101,8 +101,7 @@ spec:
         appName: ${{ parameters.topic_name }}-bootstrap
         argoInstance: main
         namespace: janus-argocd
-        repoUrl: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{
-          parameters.topic_name }}-gitops.git
+        repoUrl: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.topic_name }}-gitops.git
         path: argocd/
   output:
     links:
