@@ -15,6 +15,8 @@ spec:
     - title: Provide Information for Kafka
       required:
         - topic_name
+        - description
+        - topic_component
       properties:
         topic_name:
           title: Name
@@ -28,6 +30,14 @@ spec:
           type: string
           description: Help others understand what this topic is for.
           default: A cool kafka topic
+        topic_component:
+          title: Component
+          type: string
+          description: Component of the topic
+          ui:field: EntityPicker
+          ui:options:
+            catalogFilter:
+              - kind: Component
     - title: Application repository Information
       required:
         - repo
