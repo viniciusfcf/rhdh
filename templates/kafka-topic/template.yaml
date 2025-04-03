@@ -83,19 +83,19 @@ spec:
         copyWithoutTemplating: []
         values:
           topic_name: ${{ parameters.topic_name }}
-          destination: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.component_id}}-gitops.git
+          destination: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.topic_name}}-gitops.git
           source_repository: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.topic_name}}.git
         targetPath: ./tenant-gitops
     - id: publish-gitops
       name: Publishing to Resource Repository
       action: publish:gitlab
       input:
-        repoUrl: ${{ parameters.repo.host }}?owner=${{ parameters.repo.owner
-          }}&repo=${{parameters.topic_name}}-gitops
+        repoUrl: "${{ parameters.repo.host }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.topic_name}}-gitops"
         title: gitops resources for ${{ parameters.topic_name }}
         description: gitops resources for ${{ parameters.topic_name }}
         sourcePath: ./tenant-gitops
         repoVisibility: public
+
     - id: create-argocd-resources
       name: Create ArgoCD Resources
       action: argocd:create-resources
@@ -104,7 +104,7 @@ spec:
         argoInstance: main
         namespace: janus-argocd
         repoUrl: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.topic_name }}-gitops.git
-        path: argocd/
+        path: 'argocd/'
   output:
     links:
       - title: Source Code Repository
