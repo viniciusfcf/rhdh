@@ -12,22 +12,32 @@ spec:
   owner: rhdh
   type: resource
   parameters:
-    - title: Provide Information for Kafka
-      required:
-        - topic_name
-      properties:
-        topic_name:
-          title: Name
-          type: string
-          description: Unique name of the topic
-          default: my-topic
-          ui:field: EntityNamePicker
-          maxLength: 23
-        description:
-          title: Description
-          type: string
-          description: Help others understand what this topic is for.
-          default: A cool kafka topic
+  - title: Provide Information for Kafka
+    required:
+      - topic_name
+      - description
+      - topic_component
+    properties:
+      topic_name:
+        title: Name
+        type: string
+        description: Unique name of the topic
+        default: my-topic
+        ui:field: EntityNamePicker
+        maxLength: 23
+      description:
+        title: Description
+        type: string
+        description: Help others understand what this topic is for.
+        default: A cool kafka topic
+      topic_component:
+        title: Component
+        type: string
+        description: Component of the topic
+        ui:field: EntityPicker
+        ui:options:
+          catalogFilter:
+            - kind: Component
     - title: Application repository Information
       required:
         - repo
