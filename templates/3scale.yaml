@@ -17,5 +17,25 @@ spec:
   profile:
     displayName: 3scale
     email: 3scale@example.com
-    
   children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: artist-relations-team
+  description: Artists team
+spec:
+  type: client
+  profile:
+    displayName: Artists team
+    email: art@example.com
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: artists
+  description: Everything about artists
+spec:
+  owner: artist-relations-team
+  subdomainOf: audio-domain
