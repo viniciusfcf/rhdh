@@ -1,0 +1,21 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: 3scale
+  description: Handy tools to keep artists in the loop
+spec:
+  owner: artist-relations-team
+  domain: artists
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: 3scale
+  description: 3scale APIs
+spec:
+  type: tool
+  profile:
+    displayName: 3scale
+    email: 3scale@example.com
+    
+  children: []
