@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: modify-yaml-and-push
-  title: Clone, Edit YAML, and Push
-  description: Clones a repository, edits a YAML file, and pushes back to the same repo.
+  name: modify-file-and-push
+  title: Clone, Replace in File, and Push
+  description: Clona um repositório, faz uma substituição de texto em um arquivo e faz push de volta.
 spec:
   owner: user:guest
   type: automation
@@ -16,28 +16,28 @@ spec:
         repoUrl:
           title: Repository URL
           type: string
-          description: Git repository to clone and modify (e.g., github.com?repo=org/repo)
+          description: Git repository to clone and modify (ex: github.com?repo=org/repo)
 
-    - title: YAML Modification
+    - title: File Modification
       required:
-        - yamlPath
-        - yamlKey
-        - newValue
+        - filePath
+        - searchPattern
+        - replacement
       properties:
-        yamlPath:
-          title: Path to YAML file
+        filePath:
+          title: Caminho do Arquivo
           type: string
-          description: Relative path to the YAML file (e.g., config/config.yaml)
+          description: Caminho relativo do arquivo a ser modificado (ex: config/config.yaml)
 
-        yamlKey:
-          title: YAML Key to Modify
+        searchPattern:
+          title: Padrão de Busca (Regex)
           type: string
-          description: The YAML key to change (dot notation supported, e.g., spec.replicas)
+          description: Padrão de texto que será substituído (ex: replicas: [0-9]+)
 
-        newValue:
-          title: New Value
+        replacement:
+          title: Novo Valor
           type: string
-          description: New value to set for the YAML key
+          description: Texto que vai substituir o padrão encontrado
 
   steps:
     - id: fetch-repo
@@ -47,21 +47,21 @@ spec:
         url: '{{ parameters.repoUrl }}'
         targetPath: ./workspace
 
-    - id: modify-yaml
-      name: Update YAML File
-      action: roadiehq:utils:edit-yaml
+    - id: replace-content
+      name: Replace content in file
+      action: roadiehq:utils:fs:replace
       input:
-        path: ./workspace/{{ parameters.yamlPath }}
-        changes:
-          - key: '{{ parameters.yamlKey }}'
-            value: '{{ parameters.newValue }}'
+        files:
+          - ./workspace/{{ parameters.filePath }}
+        find: '{{ parameters.searchPattern }}'
+        replace: '{{ parameters.replacement }}'
 
     - id: git-commit
       name: Commit Changes
       action: git:commit
       input:
         workingDirectory: ./workspace
-        message: "chore: automated YAML update via Backstage Template"
+        message: "chore: automated file update via Backstage Template"
 
     - id: git-push
       name: Push Changes
