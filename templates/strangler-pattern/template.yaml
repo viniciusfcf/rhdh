@@ -1,0 +1,70 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: modify-yaml-and-push
+  title: Clone, Edit YAML, and Push
+  description: Clones a repository, edits a YAML file, and pushes back to the same repo.
+spec:
+  owner: user:guest
+  type: automation
+
+  parameters:
+    - title: Repository Info
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository URL
+          type: string
+          description: Git repository to clone and modify (e.g., github.com?repo=org/repo)
+
+    - title: YAML Modification
+      required:
+        - yamlPath
+        - yamlKey
+        - newValue
+      properties:
+        yamlPath:
+          title: Path to YAML file
+          type: string
+          description: Relative path to the YAML file (e.g., config/config.yaml)
+
+        yamlKey:
+          title: YAML Key to Modify
+          type: string
+          description: The YAML key to change (dot notation supported, e.g., spec.replicas)
+
+        newValue:
+          title: New Value
+          type: string
+          description: New value to set for the YAML key
+
+  steps:
+    - id: fetch-repo
+      name: Fetch Repository
+      action: fetch:template
+      input:
+        url: '{{ parameters.repoUrl }}'
+        targetPath: ./workspace
+
+    - id: modify-yaml
+      name: Update YAML File
+      action: roadiehq:utils:edit-yaml
+      input:
+        path: ./workspace/{{ parameters.yamlPath }}
+        changes:
+          - key: '{{ parameters.yamlKey }}'
+            value: '{{ parameters.newValue }}'
+
+    - id: git-commit
+      name: Commit Changes
+      action: git:commit
+      input:
+        workingDirectory: ./workspace
+        message: "chore: automated YAML update via Backstage Template"
+
+    - id: git-push
+      name: Push Changes
+      action: git:push
+      input:
+        workingDirectory: ./workspace
