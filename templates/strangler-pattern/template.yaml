@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: modify-yaml-and-push
-  title: Clone, Edit YAML, and Push 2
+  title: Clone, Edit File, and Push
   description: Clones a repository, edits a YAML file, and pushes back to the same repo.
 spec:
   owner: user:guest
