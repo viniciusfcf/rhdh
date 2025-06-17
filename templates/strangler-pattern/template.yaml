@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: modify-yaml-and-push
-  title: Clone, Edit, and Push
+  title: Clone, Edit, and Push!
   description: Clones a repository, edits a file, and pushes back to the same repo.
 spec:
   owner: user:guest
@@ -53,7 +53,7 @@ spec:
         files:
           - file: ./workspace/{{ parameters.filePath }}
             find: '{{ parameters.yamlKey }}'
-            replace: '{{ parameters.newValue }}'
+            replaceWith: '{{ parameters.newValue }}'
         
     - id: git-commit
       name: Commit Changes
