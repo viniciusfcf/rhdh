@@ -16,7 +16,7 @@ spec:
         repoUrl:
           title: Repository URL
           type: string
-          description: Git repository to clone and modify (ex: github.com?repo=org/repo)
+          description: Git repository to clone and modify
 
     - title: File Modification
       required:
