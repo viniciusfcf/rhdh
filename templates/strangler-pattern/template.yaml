@@ -51,7 +51,7 @@ spec:
       action: roadiehq:utils:fs:replace
       input:
         files:
-          - file: ./workspace/{{ parameters.filePath }}
+          - file: ./workspace/{{ parameters.yamlPath }}
             find: '{{ parameters.yamlKey }}'
             replaceWith: '{{ parameters.newValue }}'
         
