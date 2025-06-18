@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: modify-yaml-and-push
-  title: Clone, Edit, and Push3
+  title: Clone, Edit, and Push4
   
   description: Clones a repository, edits a file, and pushes back to the same repo.
   
@@ -84,15 +84,24 @@ spec:
     #         find: '{{ parameters.yamlKey }}'
     #         replaceWith: '{{ parameters.newValue }}'
         
-    - id: git-commit
-      name: Commit Changes
-      action: git:commit
-      input:
-        workingDirectory: ./workspace
-        message: "chore: automated YAML update via Backstage Template"
+    # - id: git-commit
+    #   name: Commit Changes
+    #   action: git:commit
+    #   input:
+    #     workingDirectory: ./workspace
+    #     message: "chore: automated YAML update via Backstage Template"
 
-    - id: git-push
-      name: Push Changes
-      action: git:push
+    # - id: git-push
+    #   name: Push Changes
+    #   action: git:push
+    #   input:
+    #     workingDirectory: ./workspace
+
+    - id: push-to-gitlab
+      name: Push to GitLab
+      action: gitlab:repo:push
       input:
-        workingDirectory: ./workspace
+        repoUrl: {{ parameters.repoUrl }}
+        sourcePath: ./workspace
+        branch: main
+        commitMessage: 'feat: Arquivo gerado automaticamente pelo Backstage Scaffolder'
