@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: modify-yaml-and-push
-  title: Clone, Edit, and Push8
-  description: Clones a repository, edits a file, and pushes back to the same repo
+  title: Clone, Edit, and Push9
+  description: Clones a repository, edits a file, and pushes back to the same repo.
   
 spec:
   owner: user:guest
@@ -12,13 +12,11 @@ spec:
     - title: Repository Info
       required:
         - repoUrl
-        
       properties:
         repoUrl:
           title: Repository URL
           type: string
           description: Git repository to clone and modify (e.g., github.com?repo=org/repo)
-
     - title: YAML Modification
       required:
         - yamlPath
@@ -41,6 +39,7 @@ spec:
           description: New value to set for the YAML key
 
   steps:
+  
     - id: clone
       name: Clone Repository
       action: fetch:template
@@ -101,7 +100,7 @@ spec:
       action: gitlab:repo:push
       input:
         #repoUrl: '{{ parameters.repoUrl }}'
-        repoUrl: gitlab-gitlab.apps.cluster-b8zs9.b8zs9.sandbox2119.opentlc.com?owner=user1&repo=teste
+        repoUrl: gitlab-gitlab.apps.cluster-b8zs9.b8zs9.sandbox2119.opentlc.com?owner=development&repo=teste
         # 'gitlab.com?repo=project_name&owner=user1'
         sourcePath: ./workspace
         branchName: main
