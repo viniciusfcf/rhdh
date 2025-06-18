@@ -2,12 +2,11 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: modify-yaml-and-push
-  title: Clone, Edit, and Push!
+  title: Clone, Edit, and Push2
   description: Clones a repository, edits a file, and pushes back to the same repo.
   
 spec:
   owner: user:guest
-  
   type: automation
 
   parameters:
@@ -44,7 +43,7 @@ spec:
   steps:
     - id: clone
       name: Clone Repository
-      action: git:clone
+      action: fetch:template
       input:
         url: '{{ parameters.repoUrl }}'
         targetPath: ./workspace
@@ -54,7 +53,7 @@ spec:
       action: roadiehq:utils:fs:replace
       input:
         files:
-          - file: ./workspace/{{ parameters.yamlPath }}
+          - file: ./workspace/teste/config.yaml
             find: '{{ parameters.yamlKey }}'
             replaceWith: '{{ parameters.newValue }}'
         
