@@ -2,9 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: modify-yaml-and-push
-  title: Clone, Edit, and Push7
+  title: Clone, Edit, and Push8
   description: Clones a repository, edits a file, and pushes back to the same repo.
-  
 spec:
   owner: user:guest
   type: automation
@@ -100,7 +99,10 @@ spec:
       name: Push to GitLab
       action: gitlab:repo:push
       input:
-        repoUrl: '{{ parameters.repoUrl }}'
+        #repoUrl: '{{ parameters.repoUrl }}'
+        repoUrl: gitlab-gitlab.apps.cluster-b8zs9.b8zs9.sandbox2119.opentlc.com?owner=user1&repo=teste
+        # 'gitlab.com?repo=project_name&owner=user1'
         sourcePath: ./workspace
         branchName: main
         commitMessage: 'feat: Arquivo gerado automaticamente pelo Backstage Scaffolder'
+        commitAction: update
