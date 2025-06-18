@@ -2,7 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: modify-yaml-and-push
-  title: Clone, Edit, and Push2
+  title: Clone, Edit, and Push3
+  
   description: Clones a repository, edits a file, and pushes back to the same repo.
   
 spec:
@@ -48,14 +49,40 @@ spec:
         url: '{{ parameters.repoUrl }}'
         targetPath: ./workspace
 
-    - id: replace-content
-      name: Replace content in file
-      action: roadiehq:utils:fs:replace
+    - id: write-file1
+      name: Write file
+      action: roadiehq:utils:fs:write
       input:
-        files:
-          - file: ./workspace/teste/config.yaml
-            find: '{{ parameters.yamlKey }}'
-            replaceWith: '{{ parameters.newValue }}'
+        path: ./workspace/README.md
+        content: |
+          # Novo README
+          
+          Este arquivo foi criado automaticamente por um template do Backstage.
+          
+          - Gerado via Scaffolder 1
+
+
+    - id: write-file2
+      name: Write file
+      action: roadiehq:utils:fs:write
+      input:
+        path: ./workspace/teste/README.md
+        content: |
+          # Novo README
+          
+          Este arquivo foi criado automaticamente por um template do Backstage.
+          
+          - Gerado via Scaffolder 2
+
+
+    # - id: replace-content
+    #   name: Replace content in file
+    #   action: roadiehq:utils:fs:replace
+    #   input:
+    #     files:
+    #       - file: ./workspace/teste/config.yaml
+    #         find: '{{ parameters.yamlKey }}'
+    #         replaceWith: '{{ parameters.newValue }}'
         
     - id: git-commit
       name: Commit Changes
