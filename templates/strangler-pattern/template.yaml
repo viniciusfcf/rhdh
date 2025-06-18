@@ -3,7 +3,8 @@ kind: Template
 metadata:
   name: modify-yaml-and-push
   title: Clone, Edit, and Push8
-  description: Clones a repository, edits a file, and pushes back to the same repo.
+  description: Clones a repository, edits a file, and pushes back to the same repo
+  
 spec:
   owner: user:guest
   type: automation
