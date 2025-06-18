@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: modify-yaml-and-push
-  title: Clone, Edit, and Push4
+  title: Clone, Edit, and Push5
   description: Clones a repository, edits a file, and pushes back to the same repo.
 
 spec:
@@ -102,5 +102,5 @@ spec:
       input:
         repoUrl: {{ parameters.repoUrl }}
         sourcePath: ./workspace
-        branch: main
+        branchName: master
         commitMessage: 'feat: Arquivo gerado automaticamente pelo Backstage Scaffolder'
