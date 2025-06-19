@@ -34,8 +34,8 @@
         insertbefore: '    - match:'
         block: |1
              - match:
-             - uri:
-                 prefix: /pix-preprod/quatro
+                 - uri:
+                     prefix: /pix-preprod/quatro
                rewrite:
                  uri: /
                route:
