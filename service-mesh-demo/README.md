@@ -17,3 +17,9 @@ Init JBOSS:
 
 Test:
 [http](http://localhost:8080/service-mesh-demo/)
+
+Create Image:
+`docker build -t service-mesh-demo .`
+
+Run the Image:
+`docker run -p 8080:8080 service-mesh-demo`
