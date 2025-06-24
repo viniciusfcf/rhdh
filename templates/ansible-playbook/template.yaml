@@ -30,6 +30,7 @@ spec:
         token: abc
         values:
           template:
+            id: 31
             name: clone-edit-push
     
   output:
