@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: ansible-playbook-template
-  title: Ansible Playbook.
+  title: Ansible Playbook
   description: Launch a Job Template
   tags:
     - ansible
@@ -12,7 +12,7 @@ spec:
   type: playbook
 
   parameters:
-  - title: Ansible Job Template.
+  - title: Ansible Job Template
     required:
       - component_id
     properties:
@@ -30,7 +30,7 @@ spec:
         token: abc
         values:
           template:
-            id: 31
+            id: 10
             name: clone-edit-push
     
   output:
