@@ -23,3 +23,9 @@ Create Image:
 
 Run the Image:
 `docker run -p 8080:8080 service-mesh-demo`
+
+
+FAZER O DEPLOY, retirar a segurança da ROUTE.
+
+Deploy da aplicacao
+quay.io/vflorent/quarkus-app

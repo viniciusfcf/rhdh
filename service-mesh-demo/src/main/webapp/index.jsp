@@ -20,12 +20,20 @@
     <p>Este exemplo faz chamadas a dois servlets simulando dois serviços passando por um Service Mesh.</p>
 
     <%
+        System.out.println("Iniciando base");
         String[] services = { "serviceA", "serviceB" };
         String[] cssClasses = { "service-a", "service-b" };
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-
+        System.out.println("Scheme: "+request.getScheme());
+        System.out.println("getServerName: "+request.getServerName());
+        System.out.println("request.getServerPort(): "+request.getServerPort());
+        System.out.println("request.getContextPath(): "+request.getContextPath());
+        //String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        String baseUrl = "http://" + request.getServerName() + request.getContextPath();
+        System.out.println("baseUrl: "+baseUrl);
         for (int i = 0; i < services.length; i++) {
+            
             String serviceUrl = baseUrl + "/" + services[i];
+            System.out.println("serviceUrl: "+serviceUrl);
             String responseText = "";
             boolean error = false;
 
@@ -44,7 +52,9 @@
 
                 in.close();
                 responseText = content.toString();
+                System.out.println("responseText: "+responseText);
             } catch (Exception e) {
+                e.printStackTrace();
                 error = true;
                 responseText = "Error calling " + serviceUrl + ": " + e.getMessage();
             }
