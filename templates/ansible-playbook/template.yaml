@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: ansible-playbook-template
-  title: Ansible Playbook
-  description: Launch a Job Template
+  title: Ansible Playbook!
+  description: Launch a Job Template!
   tags:
     - ansible
     - playbook
@@ -12,7 +12,7 @@ spec:
   type: playbook
 
   parameters:
-  - title: Ansible Job Template
+  - title: Ansible Job Template!
     required:
       - component_id
     properties:
