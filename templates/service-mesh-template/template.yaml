@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: add-to-service-mesh
   title: Add To Service Mesh
-  description: Create a VirtualService
+  description: Create a VirtualService in Service Mesh
   tags:
     - recommended
     - service-mesh
@@ -87,6 +87,8 @@ spec:
         copyWithoutTemplating: []
         values:
           service_namespace: ${{ parameters.service_namespace }}
+          app_path: ${{ parameters.app_path }}
+          app_service: ${{ parameters.app_service }}
           destination: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.service_namespace}}-gitops.git
           source_repository: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.service_namespace}}.git
         targetPath: ./tenant-gitops
