@@ -3,7 +3,8 @@ kind: Template
 metadata:
   name: add-to-service-mesh
   title: Add To Service Mesh
-  description: Create a VirtualService!
+  description: Create a VirtualService...
+  
   tags:
     - recommended
     - service-mesh
