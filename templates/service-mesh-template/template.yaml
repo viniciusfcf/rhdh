@@ -19,9 +19,9 @@ spec:
         - app_service
       properties:
         service_namespace:
-          title: Name
+          title: Namespace
           type: string
-          description: Namespace
+          description: Namespace of the deployment
           default: servlet
         app_path:
           title: Path
