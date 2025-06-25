@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: add-to-service-mesh
   title: Add To Service Mesh
-  description: Create a VirtualService
+  description: Create a VirtualService!
   tags:
     - recommended
     - service-mesh
@@ -62,15 +62,15 @@ spec:
         copyWithoutTemplating:
           - .github/workflows/*
         values:
-          topic_name: ${{ parameters.topic_name }}
-          description: ${{ parameters.description }}
-          topic_component: ${{ parameters.topic_component }}
+          service_namespace: ${{ parameters.service_namespace }}
+          app_path: ${{ parameters.app_path }}
+          app_service: ${{ parameters.app_service }}
     - id: publish
       name: Publish
       action: publish:gitlab
       input:
         repoUrl: ${{ parameters.repo.host }}?owner=${{ parameters.repo.owner
-          }}&repo=${{parameters.topic_name}}
+          }}&repo=${{parameters.service_namespace}}
         repoVisibility: public
     - id: register
       name: Register
@@ -86,17 +86,17 @@ spec:
         url: ./manifests
         copyWithoutTemplating: []
         values:
-          topic_name: ${{ parameters.topic_name }}
-          destination: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.topic_name}}-gitops.git
-          source_repository: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.topic_name}}.git
+          service_namespace: ${{ parameters.service_namespace }}
+          destination: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.service_namespace}}-gitops.git
+          source_repository: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.service_namespace}}.git
         targetPath: ./tenant-gitops
     - id: publish-gitops
       name: Publishing to Resource Repository
       action: publish:gitlab
       input:
-        repoUrl: "${{ parameters.repo.host }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.topic_name}}-gitops"
-        title: gitops resources for ${{ parameters.topic_name }}
-        description: gitops resources for ${{ parameters.topic_name }}
+        repoUrl: "${{ parameters.repo.host }}?owner=${{ parameters.repo.owner }}&repo=${{parameters.service_namespace}}-gitops"
+        title: gitops resources for ${{ parameters.service_namespace }}
+        description: gitops resources for ${{ parameters.service_namespace }}
         sourcePath: ./tenant-gitops
         repoVisibility: public
 
@@ -104,10 +104,10 @@ spec:
       name: Create ArgoCD Resources
       action: argocd:create-resources
       input:
-        appName: ${{ parameters.topic_name }}-bootstrap
+        appName: ${{ parameters.service_namespace }}-bootstrap
         argoInstance: main
         namespace: janus-argocd
-        repoUrl: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.topic_name }}-gitops.git
+        repoUrl: https://${{ parameters.repo.host }}/${{ parameters.repo.owner }}/${{parameters.service_namespace }}-gitops.git
         path: 'argocd/'
   output:
     links:
