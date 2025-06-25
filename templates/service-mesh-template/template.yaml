@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: add-to-service-mesh
   title: Add To Service Mesh
-  description: Create a VirtualService.
+  description: Create a VirtualService
   tags:
     - recommended
     - service-mesh
@@ -113,6 +113,8 @@ spec:
         path: 'argocd/'
   output:
     links:
+      - title: Application
+        url: http://istio-ingressgateway-istio-system.apps.cluster-x6thp.x6thp.sandbox1348.opentlc.com/${{ parameters.app_path }}
       - title: Source Code Repository
         url: ${{ steps.publish.output.remoteUrl }}
       - title: Gitops Repository
