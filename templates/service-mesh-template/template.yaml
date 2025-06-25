@@ -32,7 +32,7 @@ spec:
           title: Service
           type: string
           description: Deployment Service
-          default:  service-mesh-demo
+          default:  rhel9-eap8-legado-svc
     - title: Application repository Information
       required:
         - repo

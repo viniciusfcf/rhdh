@@ -13,7 +13,7 @@ spec:
         - uri:
             prefix: /{{ .Values.service.app_path }}
       rewrite:
-        uri: /
+        uri: /{{ .Values.service.app_path }}
       route:
         - destination:
             host: {{ .Values.service.app_service }}
