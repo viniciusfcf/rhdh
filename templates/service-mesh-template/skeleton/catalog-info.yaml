@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: ${{values.service_namespace}}
+  description: VirtualService of the namespace ${{values.service_namespace}}. Prefix ${{values.app_path }} and destination ${{ values.app_service }}
+spec:
+  type: virtual-service
+  owner: "user1"
