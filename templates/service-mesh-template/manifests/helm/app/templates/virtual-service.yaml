@@ -1,8 +1,8 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: {{ .Values.service_namespace }}
-  namespace: {{ .Values.service_namespace }}
+  name: {{ .Values.service.service_namespace }}
+  namespace: {{ .Values.service.service_namespace }}
 spec:
   gateways:
     - istio-system/istio-ingressgateway
@@ -11,11 +11,11 @@ spec:
   http:
     - match:
         - uri:
-            prefix: /{{ .Values.app_path }}
+            prefix: /{{ .Values.service.app_path }}
       rewrite:
         uri: /
       route:
         - destination:
-            host: {{ .Values.app_service }}
+            host: {{ .Values.service.app_service }}
             port:
               number: 8080
