@@ -7,3 +7,7 @@ namespace:
   argocd:
     name: default
 
+service:
+  service_namespace: ${{values.service_namespace}}
+  app_path: ${{values.app_path}}
+  app_service: ${{values.app_service}}
