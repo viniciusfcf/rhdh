@@ -1,108 +1,67 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: modify-yaml-and-push
-  title: Clone, Edit, and Push9
-  description: Clones a repository, edits a file, and pushes back to the same repo.
+  name: strangler-pattern
+  title: Strangler Pattern
+  description: Strangle a monolith
   
 spec:
   owner: user:guest
   type: automation
   parameters:
-    - title: Repository Info
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository URL
-          type: string
-          description: Git repository to clone and modify (e.g., github.com?repo=org/repo)
-    - title: YAML Modification
-      required:
-        - yamlPath
-        - yamlKey
-        - newValue
-      properties:
-        yamlPath:
-          title: Path to YAML file
-          type: string
-          description: Relative path to the YAML file (e.g., config/config.yaml)
-
-        yamlKey:
-          title: YAML Key to Modify
-          type: string
-          description: The YAML key to change (dot notation supported, e.g., spec.replicas)
-
-        newValue:
-          title: New Value
-          type: string
-          description: New value to set for the YAML key
-
+  - title: Service Parameters
+    required:
+      - app_service
+      - app_namespace
+      - uri_prefix
+      - uri_rewrite
+    properties:
+      
+      app_namespace:
+        title: App Namespace
+        type: string
+        description: Unique name of the component
+        default: servlet
+        ui:field: EntityNamePicker
+      uri_prefix:
+        title: URI Prefix
+        type: string
+        description: Unique name of the component
+        default: service-mesh-demo/serviceA
+        ui:field: EntityNamePicker
+      app_service:
+        title: Service Destination
+        type: string
+        description: Internal OpenShift Service
+        default: offline-dev.offline-dev.svc.cluster.local
+        ui:field: EntityNamePicker
+      uri_rewrite:
+        title: URI Rewrite
+        type: string
+        description: Unique name of the component
+        default: hello
+        ui:field: EntityNamePicker
+      
   steps:
-  
-    - id: clone
-      name: Clone Repository
-      action: fetch:template
+    - id: launch
+      name: Launch
+      action: rhaap:launch-job-template
       input:
-        url: '{{ parameters.repoUrl }}'
-        targetPath: ./workspace
-
-    - id: write-file1
-      name: Write file
-      action: roadiehq:utils:fs:write
-      input:
-        path: ./workspace/README.md
-        content: |
-          # Novo README
-          
-          Este arquivo foi criado automaticamente por um template do Backstage.
-          
-          - Gerado via Scaffolder 1
-
-
-    - id: write-file2
-      name: Write file
-      action: roadiehq:utils:fs:write
-      input:
-        path: ./workspace/teste/README.md
-        content: |
-          # Novo README
-          
-          Este arquivo foi criado automaticamente por um template do Backstage.
-          
-          - Gerado via Scaffolder 2
-
-
-    # - id: replace-content
-    #   name: Replace content in file
-    #   action: roadiehq:utils:fs:replace
-    #   input:
-    #     files:
-    #       - file: ./workspace/teste/config.yaml
-    #         find: '{{ parameters.yamlKey }}'
-    #         replaceWith: '{{ parameters.newValue }}'
-        
-    # - id: git-commit
-    #   name: Commit Changes
-    #   action: git:commit
-    #   input:
-    #     workingDirectory: ./workspace
-    #     message: "chore: automated YAML update via Backstage Template"
-
-    # - id: git-push
-    #   name: Push Changes
-    #   action: git:push
-    #   input:
-    #     workingDirectory: ./workspace
-
-    - id: push-to-gitlab
-      name: Push to GitLab
-      action: gitlab:repo:push
-      input:
-        #repoUrl: '{{ parameters.repoUrl }}'
-        repoUrl: gitlab-gitlab.apps.cluster-b8zs9.b8zs9.sandbox2119.opentlc.com?owner=development&repo=teste
-        # 'gitlab.com?repo=project_name&owner=user1'
-        sourcePath: ./workspace
-        branchName: main
-        commitMessage: 'feat: Arquivo gerado automaticamente pelo Backstage Scaffolder'
-        commitAction: update
+        token: RfMQBrMqPzw9q42q1vs7ln54uU72w4
+        values:
+          template:
+            id: 10
+            name: clone-edit-push
+          extraVariables:
+            git_repository: ${{ parameters.app_service }}
+            git_repository: ${{ parameters.app_namespace }}-gitops
+            git_repository: ${{ parameters.uri_prefix }}
+            git_repository: ${{ parameters.uri_rewrite }}
+            
+  output:
+    links:
+      - title: URL
+        url: ${{ steps.launch.output.data.url }}
+    text:
+      - title: Status
+        content: ${{ steps['launch'].output.data.status }}
