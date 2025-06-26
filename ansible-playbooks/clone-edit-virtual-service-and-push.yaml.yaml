@@ -1,0 +1,70 @@
+---
+- name: Clone, modify config.yaml and push back to Git (with username/password)
+  hosts: localhost
+  gather_facts: no
+  vars:
+    git_username: "user1"
+    git_password: "{{ git_password }}"
+    repo_base_url: "{{ gitlab_url }}/development/{{ git_repository }}.git"
+    dest_dir: "/tmp/your_repo"
+    file_to_edit: "/tmp/your_repo/{{ file_name }}"
+    git_user_name: "Your Name"
+    git_user_email: "your_email@example.com"
+    commit_message: "Automated update to config.yaml"
+
+  tasks:
+    - name: Build Git repo URL with username and password
+      set_fact:
+        repo_url_with_auth: "https://{{ git_username }}:{{ git_password }}@{{ repo_base_url | regex_replace('https://', '') }}"
+
+    - name: Clone repository using HTTPS and AAP Credential
+      git:
+        repo: "https://{{ git_username }}:{{ git_password }}@{{repo_base_url}}"
+        dest: "{{ dest_dir }}"
+        version: "{{ branch_name }}"
+        force: true
+        
+
+    - name: Modify config.yaml
+      blockinfile:
+        path: "{{ file_to_edit }}"
+        insertbefore: '    - match:'
+        block: |1
+             - match:
+                 - uri:
+                     prefix: /{{ uri_prefix }}
+               rewrite:
+                 uri: /{{ uri_rewrite }}
+               route:
+                 - destination:
+                     host: {{ service_destination }}
+                     port:
+                       number: 8080
+
+
+    - name: Configure Git username
+      command: git config user.name "{{ git_user_name }}"
+      args:
+        chdir: "{{ dest_dir }}"
+
+    - name: Configure Git email
+      command: git config user.email "{{ git_user_email }}"
+      args:
+        chdir: "{{ dest_dir }}"
+
+    - name: Add changes
+      command: git add {{ file_to_edit }}
+      args:
+        chdir: "{{ dest_dir }}"
+
+    - name: Commit changes
+      command: git commit -m "{{ commit_message }}"
+      args:
+        chdir: "{{ dest_dir }}"
+      register: commit_result
+      failed_when: "'nothing to commit' in commit_result.stderr"
+
+    - name: Push changes
+      command: git push "{{ repo_url_with_auth }}"
+      args:
+        chdir: "{{ dest_dir }}"
