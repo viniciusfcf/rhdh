@@ -6,7 +6,7 @@ metadata:
   description: Strangle a monolith
   
 spec:
-  owner: user:guest
+  owner: user:user1
   type: automation
   parameters:
   - title: Service Parameters
