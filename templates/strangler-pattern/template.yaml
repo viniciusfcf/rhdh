@@ -53,10 +53,10 @@ spec:
             id: 10
             name: clone-edit-push
           extraVariables:
-            git_repository: ${{ parameters.app_service }}
+            service_destination: ${{ parameters.app_service }}
             git_repository: ${{ parameters.app_namespace }}-gitops
-            git_repository: ${{ parameters.uri_prefix }}
-            git_repository: ${{ parameters.uri_rewrite }}
+            uri_prefix: ${{ parameters.uri_prefix }}
+            uri_rewrite: ${{ parameters.uri_rewrite }}
             
   output:
     links:
