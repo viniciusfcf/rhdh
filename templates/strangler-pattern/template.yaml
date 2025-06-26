@@ -22,25 +22,21 @@ spec:
         type: string
         description: Unique name of the component
         default: servlet
-        ui:field: EntityNamePicker
       uri_prefix:
         title: URI Prefix
         type: string
         description: Unique name of the component
         default: service-mesh-demo/serviceA
-        ui:field: EntityNamePicker
       app_service:
         title: Service Destination
         type: string
         description: Internal OpenShift Service
         default: offline-dev.offline-dev.svc.cluster.local
-        ui:field: EntityNamePicker
       uri_rewrite:
         title: URI Rewrite
         type: string
         description: Unique name of the component
         default: hello
-        ui:field: EntityNamePicker
       
   steps:
     - id: launch
