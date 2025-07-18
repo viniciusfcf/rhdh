@@ -37,6 +37,12 @@ spec:
         - name: output
           workspace: source-folder
     - name: package
+      params:
+      - name: MAVEN_IMAGE
+        description: Maven container image (with Java 21)
+        default: maven:3.9.6-eclipse-temurin-21
+        type: string
+
       runAfter:
         - git-clone
       taskRef:
