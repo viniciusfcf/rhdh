@@ -1,0 +1,7 @@
+{  
+  "recommendations": [
+    "redhat.apache-camel-extension-pack",
+    "redhat.vscode-kaoto",
+    "redhat.vscode-quarkus"
+  ]  
+}
