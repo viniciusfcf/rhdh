@@ -24,21 +24,4 @@
             uri: log
             parameters:
               loggerName: XPTO
-        - marshal:
-            id: marshal-1365
-            json: {}
-        - setBody:
-            id: setBody-9077
-            disabled: true
-            simple:
-              expression: "null"
-        - removeHeaders:
-            id: removeHeaders-1371
-            pattern: "*"
-        - to:
-            id: to-1103
-            uri: rest
-            parameters:
-              host: http://quarkus-app-my-app.apps.cluster-z5h76.z5h76.sandbox2768.opentlc.com
-              method: post
-              path: hello/send
+
