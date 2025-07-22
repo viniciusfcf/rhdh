@@ -24,8 +24,6 @@ components:
       env:
         - name: KUBEDOCK_PARAMS
           value: "--reverse-proxy --kubeconfig /home/user/.kube/config --initimage quay.io/agiertli/kubedock:0.13.0"
-        - value: /home/user/.m2
-          name: MAVEN_CONFIG
         - value: -Xmx4G -Xss128M -XX:MetaspaceSize=1G -XX:MaxMetaspaceSize=2G
           name: MAVEN_OPTS
         - name: KUBEDOCK_ENABLED
