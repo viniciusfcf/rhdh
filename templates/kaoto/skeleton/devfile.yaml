@@ -24,9 +24,7 @@ components:
       env:
         - name: KUBEDOCK_PARAMS
           value: "--reverse-proxy --kubeconfig /home/user/.kube/config --initimage quay.io/agiertli/kubedock:0.13.0"
-        - name: USE_JAVA17
-          value: "true"
-        - value: /home/jboss/.m2
+        - value: /home/user/.m2
           name: MAVEN_CONFIG
         - value: -Xmx4G -Xss128M -XX:MetaspaceSize=1G -XX:MaxMetaspaceSize=2G
           name: MAVEN_OPTS
@@ -73,66 +71,39 @@ components:
     volume:
       size: 512Mi
 commands:
-  - id: yarn-install
+  - id: package
     exec:
-      label: 'Install Dependencies'
+      label: "1. Package the application"
       component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: 'yarn install'
+      commandLine: "./mvnw package"
       group:
         kind: build
         isDefault: true
-  - id: build
+  - id: start-dev
     exec:
-      label: 'Build'
+      label: "2. Start Development mode (Hot reload + debug)"
       component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: 'yarn workspace @kaoto/kaoto run build'
-      group:
-        kind: build
-        isDefault: true
-  - id: build-public-componets
-    exec:
-      label: 'build the public components'
-      component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: 'yarn workspace @kaoto/kaoto run build:lib'
-      group:
-        kind: build
-        isDefault: true
-  - id: build-camel-catalog-supporting-schemas
-    exec:
-      label: 'build the Camel Catalog and the supporting schemas'
-      component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: 'yarn workspace @kaoto/camel-catalog run build'
-      group:
-        kind: build
-        isDefault: true
-  - id: start-development-server
-    exec:
-      label: 'start the development server'
-      component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: 'yarn workspace @kaoto/kaoto run start --host'
+      commandLine: "./mvnw compile quarkus:dev"
       group:
         kind: run
         isDefault: true
-  - id: start-storybook
+  - id: set-java-21-default
     exec:
-      label: 'run the storybook'
+      label: "Set default Java version to 21"
       component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: 'yarn workspace @kaoto/kaoto-tests storybook'
+      commandLine: "sdk default java 21.0.5-tem"
+      workingDir: "/home/user"
       group:
-        kind: run
-        isDefault: false
-  - id: start-with-docker
+        kind: build
+  - id: configure-quarkus-cli
     exec:
-      label: 'Running kaoto with Docker'
+      label: "Configure Quarkus CLI"
       component: tools
-      workingDir: ${PROJECT_SOURCE}
-      commandLine: 'podman run --rm -p 8080:8080 --name kaoto quay.io/kaotoio/kaoto-app:main'
+      commandLine: "sdk install quarkus"
+      workingDir: "/home/user"
       group:
-        kind: run
-        isDefault: false
+         kind: build
+# events:
+#   postStart:
+#     - set-java-21-default
+#     - configure-quarkus-cli
