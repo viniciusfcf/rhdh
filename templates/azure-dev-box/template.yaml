@@ -21,7 +21,14 @@ spec:
         projectName:
           title: Project Name
           type: string
+          default: 'your-project-name'
           description: Name for the Azure Dev Box project
+        poolName:
+          title: Pool Name
+          type: string
+          default: 'three-horizons-pool'
+          description: Pool name for the Azure Dev Box project
+          
 
   steps:
     - id: login
@@ -30,6 +37,7 @@ spec:
       input:
         devBoxName: ${{ parameters.devBoxName}}
         projectName: ${{ parameters.projectName }}
+        poolName: ${{ parameters.poolName }}
 
   # output:
   #   links:
