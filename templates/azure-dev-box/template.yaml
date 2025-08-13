@@ -12,11 +12,16 @@ spec:
     - title: Azure Dev Box Configuration
       required:
         - devBoxName
+        - projectName
       properties:
         devBoxName:
           title: Dev Box Name
           type: string
           description: Name for the new Dev Box
+        projectName:
+          title: Project Name
+          type: string
+          description: Name for the Azure Dev Box project
 
   steps:
     - id: login
@@ -24,6 +29,7 @@ spec:
       action: azure:create-devbox
       input:
         devBoxName: ${{ parameters.devBoxName}}
+        projectName: ${{ parameters.projectName }}
 
   # output:
   #   links:
