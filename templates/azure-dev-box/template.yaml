@@ -11,28 +11,8 @@ spec:
   parameters:
     - title: Azure Dev Box Configuration
       required:
-        - devCenterUri
-        - projectName
-        - poolName
-        - devBoxTemplateName
         - devBoxName
       properties:
-        devCenterUri:
-          title: Dev Center URI
-          type: string
-          description: URI of your Dev Center (e.g. https://<devcenter-name>.devcenter.azure.com)
-        projectName:
-          title: Project Name
-          type: string
-          description: Name of the Azure Dev Center Project
-        poolName:
-          title: Pool Name
-          type: string
-          description: Pool in which the Dev Box will be created
-        devBoxTemplateName:
-          title: Dev Box Template Name
-          type: string
-          description: Name of the Dev Box template to use
         devBoxName:
           title: Dev Box Name
           type: string
@@ -41,32 +21,11 @@ spec:
   steps:
     - id: login
       name: Azure Login (Device Code)
-      action: roadiehq:utils:execute-shell-command
+      action: azure:create-devbox
       input:
-        workingDirectory: ${{ parameters.workingDir | default("./") }}
-        shell: bash
-        command: |
-          echo "Please authenticate with Azure using your own account..."
-          az login --use-device-code
-          echo "Azure login complete."
+        devBoxName: ${{ parameters.devBoxName}}
 
-    - id: create-devbox
-      name: Create Dev Box
-      action: roadiehq:utils:execute-shell-command
-      input:
-        shell: bash
-        command: |
-          echo "Creating Dev Box..."
-          az devcenter dev dev-box create \
-            --dev-center ${{ parameters.devCenterUri }} \
-            --project-name ${{ parameters.projectName }} \
-            --pool-name ${{ parameters.poolName }} \
-            --dev-box-definition-name ${{ parameters.devBoxTemplateName }} \
-            --name ${{ parameters.devBoxName }} \
-            --yes
-          echo "Dev Box creation request sent."
-
-  output:
-    links:
-      - title: Azure Dev Center
-        url: ${{ parameters.devCenterUri }}
+  # output:
+  #   links:
+  #     - title: Azure Dev Center
+  #       url: ${{ parameters.devCenterUri }}
