@@ -13,6 +13,8 @@ spec:
       required:
         - devBoxName
         - projectName
+        - poolName
+        - accessToken
       properties:
         devBoxName:
           title: Dev Box Name
@@ -28,18 +30,25 @@ spec:
           type: string
           default: 'three-horizons-pool'
           description: Pool name for the Azure Dev Box project
+        accessToken:
+          title: AccessToken
+          type: string
+          description: Pool name for the Azure Dev Box project
+          ui:field: ValidateKebabCase
           
 
   steps:
-    - id: login
-      name: Azure Login (Device Code)
+    - id: create-devbox
+      name: Dev Center Create Dev Box
       action: azure:create-devbox
       input:
         devBoxName: ${{ parameters.devBoxName}}
         projectName: ${{ parameters.projectName }}
         poolName: ${{ parameters.poolName }}
+        accessToken: ${{ parameters.accessToken }}
 
-  # output:
-  #   links:
-  #     - title: Azure Dev Center
-  #       url: ${{ parameters.devCenterUri }}
+  output:
+    links:
+      - title: 'Go to Azure DevBoxes'
+        url: '/azure-devbox'
+        icon: dashboard
