@@ -20,6 +20,7 @@ spec:
           title: Dev Box Name
           type: string
           description: Name for the new Dev Box
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9-_.]{2,62}$
         projectName:
           title: Project Name
           type: string
